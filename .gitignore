@@ -1,0 +1,31 @@
+# Ignore Python virtual environment
+env/
+
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore Django specific files
+db.sqlite3
+
+# Ignore Node.js dependencies
+frontend/node_modules/
+
+# Ignore environment variables
+.env
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore build artifacts
+frontend/dist/
+
+# Ignore log files
+*.log
+
+# Ignore other large files and directories
+*.dll
+*.lib
