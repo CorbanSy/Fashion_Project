@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders } from "axios"
+import axios from "axios"
 import { ACCESS_TOKEN } from "./constants"
 
 const apiUrl = "/choreo-apis/fashionproject/backend/v1"
