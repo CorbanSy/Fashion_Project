@@ -19,7 +19,7 @@ frontend/node_modules/
 
 # Ignore Visual Studio Code settings
 .vscode/
-
+.vs/
 # Ignore build artifacts
 frontend/dist/
 

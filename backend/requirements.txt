@@ -3,7 +3,7 @@ Django==4.2.2
 djangorestframework==3.14.0
 
 # Database
-psycopg2-binary==2.9.6  # Assuming you are using PostgreSQL
+psycopg2-binary # Assuming you are using PostgreSQL
 
 # Image handling
 Pillow==9.5.0
