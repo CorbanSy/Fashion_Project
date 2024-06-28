@@ -1,0 +1,16 @@
+.recommendations-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.recommendation {
+    margin: 20px;
+    text-align: center;
+}
+
+.recommendation img {
+    max-width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}

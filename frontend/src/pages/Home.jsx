@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import api from "../api";
 import FashionItem from "../components/FashionItem";
 import "../styles/Home.css"
+import { useNavigate } from "react-router-dom";
+
 function Home() {
   const [fashionItems, setFashionItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getFashionItems();
@@ -27,6 +30,7 @@ function Home() {
           <FashionItem item={item} key={item.id}/>
         ))}
       </div>
+      <button onClick={() => navigate("/upload")}>Upload Outfit</button>
     </div>
   );
 }
