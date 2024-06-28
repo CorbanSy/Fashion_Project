@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation
@@ -35,13 +36,13 @@ class OutfitRecommendationView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        outfit_id = self.kawrgs["outfit_id"]
+        outfit_id = self.kwargs["outfit_id"]
         return OutfitRecommendation.objects.filter(outfit_id=outfit_id)
     
     def post(self, request, *args, **kwargs):
         outfit_id = self.kwargs["outfit_id"]
         outfit = Outfit.objects.get(id=outfit_id)
-        recommended_item = FashionItem.objects.order_by("?".first())
+        recommended_item = FashionItem.objects.order_by("?").first()
         recommendation = OutfitRecommendation.objects.create(
             outfit=outfit,
             recommended_item=recommended_item,
