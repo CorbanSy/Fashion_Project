@@ -24,10 +24,10 @@ function Home() {
       <h2>Fashion Items</h2>
       <div className="fashion-item-list">
         {fashionItems.map((item) => (
-          <FashionItem item={item} key={item.id}
+          <FashionItem item={item} key={item.id}/>
         ))}
       </div>
     </div>
-  )
-
+  );
+}
 export default Home;
