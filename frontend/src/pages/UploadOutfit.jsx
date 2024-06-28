@@ -2,7 +2,7 @@ import { useState } from "react";
 import { uploadOutfit } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/Form.css";
-import LoadingIndicator from "./LoadingIndicator";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 function UploadOutfit(){
     const [image, setImage] = useState(null);

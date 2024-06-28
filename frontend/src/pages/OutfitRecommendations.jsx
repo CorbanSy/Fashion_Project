@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOutfitRecommendations } from "../api";
 import "../styles/Recommendations.css";
-import LoadingIndicator from "./LoadingIndicator";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 function OutfitRecommendations(){
     const { outfitId } = useParams();
