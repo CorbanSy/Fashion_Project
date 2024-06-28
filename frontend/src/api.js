@@ -20,4 +20,8 @@ api.interceptors.request.use(
     }
 )
 
+export const uploadOutfit = (data) => api.post("/outfits/", data);
+export const getOutfitRecommendations = (outfitId) => api.get( `/outfits/${outfiId}/recommendations/`);
+
+
 export default api
