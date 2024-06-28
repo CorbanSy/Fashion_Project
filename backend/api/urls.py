@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from .views import FashionItemListCreate, UserPreferenceDetail
 
 urlpatterns = [
-    path("notes/", views.NoteListCreate.as_view(), name="note-list"),
-    path("notes/delete/<int:pk>/", views.NoteDelete.as_view(), name="delete-note"),
+    path("fashion-items/", FashionItemListCreate.as_view(), name="fashion-item-list"),
+    path("user/preferences/", UserPreferenceDetail.as_view(), name="user-preferences"),
 ]
