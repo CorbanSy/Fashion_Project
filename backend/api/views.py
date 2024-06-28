@@ -5,11 +5,21 @@ from rest_framework.response import Response
 from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation
+import logging
+
+logger = logging.getLogger(__name__)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, * args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error creating user: {str(e)}", exc_info=True)
+            return Response({"detail": "An error occured while creating the user."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class FashionItemListCreate(generics.ListCreateAPIView):
     queryset = FashionItem.objects.all()

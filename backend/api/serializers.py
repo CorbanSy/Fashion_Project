@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,8 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only":True}}
 
     def create(self, validated_data):
-        user = user.objects.create_user(**validated_data)
-        return user
+        try:
+            user = user.objects.create_user(**validated_data)
+            return user
+        except Exception as e:
+            logger.error(f"error creating user in serializers: {str(e)}", exc_info=True)
+            raise e
 
 class FashionItemSerializer(serializers.ModelSerializer):
     class Meta:
