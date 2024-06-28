@@ -18,3 +18,19 @@ class UserPreference(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Preferences"
+    
+class Outfit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="outfits")
+    image = models.ImageField(upload_to="outfits/")
+    rating = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Outfit {self.id} by {self.user.username}"
+
+class OutfitRecommendation(models.Model):
+    outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE, related_name="recommendations")
+    recommended_item = models.ForeignKey(FashionItem, on_delete=models.CASCADE)
+    reason = models.TextField()
+
+    def __str__(self):
+        return f"Recommendation for {self.outfit.id}"
