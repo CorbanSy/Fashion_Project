@@ -23,7 +23,7 @@ class UserPreferencesSerializer(serializers.ModelSerializer):
         fields = ["id", "user", "preferred_styles", "preferred_colors"]
         extra_kwargs = {"user": {"read_only":True}}
 
-class OutfitSerializers(serializers.ModelSerializer):
+class OutfitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Outfit
         fields = ["id", "user", "image", "rating"]
