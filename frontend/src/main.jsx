@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import UploadOutfit from "./pages/UploadOutfit";
 import OutfitRecommendations from "./pages/OutfitRecommendations";
 import NotFound from "./pages/NotFound";
+import VirtualCloset from "./pages/VirtualCloset";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./styles/index.css";
 
@@ -21,6 +22,7 @@ root.render(
                 <Route path="register" element={<Register />} />
                 <Route path="upload" element={<ProtectedRoute><UploadOutfit /></ProtectedRoute>} />
                 <Route path="outfits/:outfitId/recommendations" element={<ProtectedRoute><OutfitRecommendations /></ProtectedRoute>} />
+                <Route path="virtual-closet" element={<ProtectedRoute><VirtualCloset /></ProtectedRoute>}/>
                 <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>

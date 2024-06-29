@@ -1,0 +1,50 @@
+/* Container for the virtual closet page */
+.virtual-closet-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Title styling */
+.virtual-closet-container h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Container for the list of closet items */
+.closet-item-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Individual closet item styling */
+.closet-item {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    width: 200px;
+    transition: transform 0.2s;
+}
+
+.closet-item:hover {
+    transform: scale(1.05);
+}
+
+/* Image styling for each closet item */
+.closet-item img {
+    width: 100%;
+    height: auto;
+}
+
+/* Title styling for each closet item */
+.closet-item h3 {
+    font-size: 1.2em;
+    margin: 10px 0;
+    padding: 0 10px;
+    color: #333;
+}
