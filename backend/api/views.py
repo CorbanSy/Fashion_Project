@@ -6,6 +6,10 @@ from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserS
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
 import logging
+import torch
+from torchvision import models, transforms
+from PIL import Image
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +44,44 @@ class OutfitCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         outfit = serializer.save(user=self.request.user)
-        #Process the image 
+        #Process the image to extract clothing items
+        self.process_outfit_image(outfit)
+
+    def process_outfit_image(self, outfit):
+        #load the image
+        image_path = outfit.image.path
+        image = Image.open(image_path)
+        #Preprocess the image
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+        image_tensor = transform(image).unsqueeze(0)
+        #load the pre-trained model
+        model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+        model.eval()
+        #Detect clothing items
+        with torch.no_grad():
+            predictions = model(image_tensor)
+        # Prcoess predictions
+        detected_items = self.detect_clothing_items(predictions, image)
+        #Save detected items to the VirtualCloset
+        for item_name, item_image in detected_items:
+            VirtualCloset.objects.create(
+                user=outfit.user,
+                item_name=item_name,
+                item_image=item_image
+            )
+
+    def detect_clothing_items(self, predictions, image):
+        detected_items = []
+        for element in predictions[0]['boxes']:
+            x1, y1, x2, y2 = map(int, element.tolist())
+            item_image = image.crop((x1, y1, x2, y2))
+            item_name = "clothing_item" #you might want to use a better naming strategy
+            item_image_path = f"media/closet_items/{item_name}_{x1}_{y1}.jpg"
+            item_image.save(item_image_path)
+            detected_items.append((item_name, item_image_path))
+        return detected_items
 
 class OutfitRecommendationView(generics.ListAPIView):
     serializer_class = OutfitRecommendationSerializer
