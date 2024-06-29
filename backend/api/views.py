@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer, VirttualClosetSerializer
+from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer, VirtualClosetSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
 import logging
@@ -102,3 +102,10 @@ class OutfitRecommendationView(generics.ListAPIView):
         )
         serializer = self.get_serializer(recommendation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class VirtualClostestView(generics.ListAPIView):
+    serializer_class = VirtualClosetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return VirtualCloset.objects.filter(user=self.request.user)

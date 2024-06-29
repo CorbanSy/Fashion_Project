@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         try:
-            user = user.objects.create_user(**validated_data)
+            user = User.objects.create_user(**validated_data)
             return user
         except Exception as e:
             logger.error(f"error creating user in serializers: {str(e)}", exc_info=True)
@@ -41,7 +41,7 @@ class OutfitRecommendationSerializer(serializers.ModelSerializer):
         model = OutfitRecommendation
         fields = "__all__"
 
-class VirttualClosetSerializer(serializers.ModelSerializer):
+class VirtualClosetSerializer(serializers.ModelSerializer):
     class Meta:
         model = VirtualCloset
         fields = ["id", "user", "item_name", "item_image"]

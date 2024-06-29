@@ -20,8 +20,17 @@ api.interceptors.request.use(
     }
 )
 
-export const uploadOutfit = (data) => api.post("/outfits/", data);
-export const getOutfitRecommendations = (outfitId) => api.get( `/outfits/${outfiId}/recommendations/`);
+export const getOutfitRecommendations = (outfitId) => {
+    return api.get(`/api/outfits/${outfitId}/recommendations/`)
+};
+
+export const uploadOutfit = (formData) => {
+    return api.post("/api/outfits/", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+};
 
 
 export default api
