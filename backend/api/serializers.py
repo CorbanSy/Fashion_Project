@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation
+from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
 import logging
 
 logger = logging.getLogger(__name__)
@@ -40,3 +40,9 @@ class OutfitRecommendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = OutfitRecommendation
         fields = "__all__"
+
+class VirttualClosetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VirtualCloset
+        fields = ["id", "user", "item_name", "item_image"]
+        extra_kwargs = {"user": {"read_only": True}}

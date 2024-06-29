@@ -34,3 +34,11 @@ class OutfitRecommendation(models.Model):
 
     def __str__(self):
         return f"Recommendation for {self.outfit.id}"
+    
+class VirtualCloset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="closet_item")
+    item_name = models.CharField(max_length=100)
+    item_image = models.ImageField(upload_to="closet_items/")
+
+    def __str__(self):
+        return f"{self.item_name} in {self.user.username}'s closet"

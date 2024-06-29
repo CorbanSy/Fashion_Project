@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer
+from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer, VirttualClosetSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation
+from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
 import logging
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,8 @@ class OutfitCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        outfit = serializer.save(user=self.request.user)
+        #Process the image 
 
 class OutfitRecommendationView(generics.ListAPIView):
     serializer_class = OutfitRecommendationSerializer
