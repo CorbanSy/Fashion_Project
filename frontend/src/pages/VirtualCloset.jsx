@@ -6,7 +6,7 @@ function VirtualCloset(){
     const [closetItems, setClosetItems] = useState([]);
 
     useEffect(() => {
-        getClosetItems();
+        getClosetItems();/*test*/
     }, []);
 
     const getClosetItems = () => {
