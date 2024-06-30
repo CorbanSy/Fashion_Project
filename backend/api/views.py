@@ -19,8 +19,11 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
+        logger.info(f"Attempting to create user with data: {request.data}")
         try:
-            return super().create(request, * args, **kwargs)
+            response =  super().create(request, * args, **kwargs)
+            logger.info(f"User created successfully: {response.data}")
+            return response
         except Exception as e:
             logger.error(f"Error creating user: {str(e)}", exc_info=True)
             return Response({"detail": "An error occured while creating the user."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
