@@ -27,6 +27,7 @@ function Form({ route, method}) {
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 navigate("/");
         } catch (error) {
+            console.error('Error:', error);
             alert(error.response ? error.response.data.detail : error.message);
         } finally {
             setLoading(false);
