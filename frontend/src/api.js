@@ -32,5 +32,8 @@ export const uploadOutfit = (formData) => {
     });
 };
 
+export const registerUser = (userData) => {
+    return api.post(`/api/user/register/`, userData)
+}
 
 export default api
