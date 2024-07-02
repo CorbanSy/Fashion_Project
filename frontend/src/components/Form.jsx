@@ -33,10 +33,13 @@ function Form({ route, method}) {
             setLoading(false);
         }
     };
+
+    console.log('Rendering Form component with route:', route, 'and method:', method);
+
     return (
         <div className="form-wrapper">
             <form onSubmit={handleSubmit} className="form-container">
-                <hi>{name}</hi>
+                <h1>{name}</h1>
                 <input
                     className="form-input"
                     type="text"

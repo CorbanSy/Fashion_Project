@@ -1,30 +1,41 @@
-import React from "react";
-import {Swiper, SwiperSlide} from 'swiper/react';
-import 'swiper/swiper-bundle.min.css';
+import React from 'react';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
+import { Carousel } from 'react-responsive-carousel';
 
-import logo1 from '../assets/logo1.png'
-import logo2 from '../assets/logo2.png'
-import logo3 from '../assets/logo3.png'
+import logo1 from '../assets/logo1.png.webp';
+import logo2 from '../assets/logo2.png.webp';
+import logo3 from '../assets/logo3.png.webp';
+import logo4 from '../assets/logo4.png.webp';
+import logo5 from '../assets/logo5.png.webp';
 
-const Carousel = () => {
+const ImageCarousel = () => {
     return (
-        <Swiper
-            spaceBetween={50}
-            slidesPerView={1}
-            autoplay={{ delay: 2500 }}
-            loop={true}
+        <Carousel 
+            autoPlay 
+            infiniteLoop 
+            showThumbs={false} 
+            showStatus={false} 
+            showArrows={true}
+            interval={3000} // 3 seconds per slide
+            axis="vertical"
         >
-            <SwiperSlide>
+            <div>
                 <img src={logo1} alt="Logo 1" />
-            </SwiperSlide>
-            <SwiperSlide>
+            </div>
+            <div>
                 <img src={logo2} alt="Logo 2" />
-            </SwiperSlide>
-            <SwiperSlide>
+            </div>
+            <div>
                 <img src={logo3} alt="Logo 3" />
-            </SwiperSlide>
-        </Swiper>
+            </div>
+            <div>
+                <img src={logo4} alt="Logo 4" />
+            </div>
+            <div>
+                <img src={logo5} alt="Logo 5" />
+            </div>
+        </Carousel>
     );
 };
 
-export default Carousel;
+export default ImageCarousel;
