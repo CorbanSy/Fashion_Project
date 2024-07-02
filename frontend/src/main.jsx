@@ -18,6 +18,7 @@ root.render(
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                <Route path="home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="upload" element={<ProtectedRoute><UploadOutfit /></ProtectedRoute>} />
