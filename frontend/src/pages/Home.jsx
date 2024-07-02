@@ -40,7 +40,7 @@ function Home() {
           Virtual Closet
         </button>
         <button className="nav-button" onClick={() => navigate("/rate-outfit")}>
-          Rate Outfit
+          Rate My Outfit
         </button>
       </div>
       <div className="carousel-wrapper">
