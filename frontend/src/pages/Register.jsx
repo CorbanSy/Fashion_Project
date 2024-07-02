@@ -11,7 +11,7 @@ function Register() {
                 <ImageCarousel />
             </div>
             <div className="center-wrapper">
-                <h1 className="center-wrapper">StyleSavvy</h1>
+                <h1 className="app-name">StyleSavvy</h1>
                 <div className="form-wrapper">
                     <Form route="/api/user/register/" method="register" />
                 </div>
