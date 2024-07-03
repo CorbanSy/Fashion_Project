@@ -10,6 +10,7 @@ function VirtualCloset() {
     const [closetItems, setClosetItems] = useState([]);
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
     const [isGenerateModalOpen, setGenerateModalOpen] = useState(false);
+    const [isViewOutfitsModalOpen, setViewOutfitsModalOpen] = useState(false);
     const categories = [
         { name: "Hats", subcategories: ["Beanie"] },
         { name: "Tops", subcategories: ["T-shirt", "Jacket", "Long sleeve"] },
@@ -44,6 +45,10 @@ function VirtualCloset() {
         setGenerateModalOpen(true);
     };
 
+    const handleViewOutfitsClick = () => {
+        setViewOutfitsModalOpen(true);
+    };
+
     return (
         <div className="virtual-closet-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
             <h2>Your Virtual Closet</h2>
@@ -76,8 +81,14 @@ function VirtualCloset() {
                 <img src={maleMannequin} alt="Male Mannequin" className="mannequin male-mannequin" />
                 <img src={femaleMannequin} alt="Female Mannequin" className="mannequin female-mannequin" />
             </div>
+            <button onClick={handleViewOutfitsClick} className="view-outfits-button">View Outfits</button>
             <button onClick={handleCreateOutfitClick} className="create-outfit-button">Create Outfit</button>
             <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
+
+            <Modal isOpen={isViewOutfitsModalOpen} onClose={() => setViewOutfitsModalOpen(false)}>
+                <h2>View Outfits</h2>
+                {/*View outfits content goes here */}
+            </Modal>
 
             <Modal isOpen={isCreateModalOpen} onClose={() => setCreateModalOpen(false)}>
                 <h2>Create Outfit</h2>

@@ -124,6 +124,7 @@
     margin-left: 10px; /* Adjust as necessary */
 }
 
+.view-outfits-button,
 .create-outfit-button,
 .generate-outfit-button {
     position: absolute;
@@ -139,24 +140,17 @@
     transition: background-color 0.3s;
 }
 
-.create-outfit-button {
-    background-color: #4caf50;
-    bottom: 70px; /* Adjust this value as needed */
-    right: 90px;
+.view-outfits-button {
+    right: 180px;
 }
 
-.generate-outfit-button {
-    background-color: #1e90ff;
-    right: 70px; /* Adjust this value as needed */
+.create-outfit-button {
+    right: 100px;
 }
 
 .create-outfit-button:hover,
 .generate-outfit-button:hover {
     background-color: #45a049;
-}
-
-.generate-outfit-button:hover {
-    background-color: #1c86ee;
 }
 
 .modal-overlay {
