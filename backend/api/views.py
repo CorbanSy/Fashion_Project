@@ -9,7 +9,6 @@ import logging
 import torch
 from torchvision import models, transforms
 from PIL import Image
-import numpy as np
 import traceback
 
 logger = logging.getLogger(__name__)
@@ -22,13 +21,13 @@ class CreateUserView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         logger.info(f"Attempting to create user with data: {request.data}")
         try:
-            response =  super().create(request, * args, **kwargs)
+            response = super().create(request, *args, **kwargs)
             logger.info(f"User created successfully: {response.data}")
             return response
         except Exception as e:
             logger.error(f"Error creating user: {str(e)}", exc_info=True)
             logger.error(traceback.format_exc())
-            return Response({"detail": "An error occured while creating the user."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"detail": "An error occurred while creating the user."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class FashionItemListCreate(generics.ListCreateAPIView):
     queryset = FashionItem.objects.all()
@@ -42,34 +41,26 @@ class UserPreferenceDetail(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.preferences
-    
-class OutfitCreateView(generics.CreateAPIView):
+
+class OutfitListCreateView(generics.ListCreateAPIView):
+    queryset = Outfit.objects.all()
     serializer_class = OutfitSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         outfit = serializer.save(user=self.request.user)
-        #Process the image to extract clothing items
         self.process_outfit_image(outfit)
-
+    
     def process_outfit_image(self, outfit):
-        #load the image
         image_path = outfit.image.path
         image = Image.open(image_path)
-        #Preprocess the image
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-        ])
+        transform = transforms.Compose([transforms.ToTensor()])
         image_tensor = transform(image).unsqueeze(0)
-        #load the pre-trained model
         model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
         model.eval()
-        #Detect clothing items
         with torch.no_grad():
             predictions = model(image_tensor)
-        # Prcoess predictions
         detected_items = self.detect_clothing_items(predictions, image)
-        #Save detected items to the VirtualCloset
         for item_name, item_image in detected_items:
             VirtualCloset.objects.create(
                 user=outfit.user,
@@ -82,7 +73,7 @@ class OutfitCreateView(generics.CreateAPIView):
         for element in predictions[0]['boxes']:
             x1, y1, x2, y2 = map(int, element.tolist())
             item_image = image.crop((x1, y1, x2, y2))
-            item_name = "clothing_item" #you might want to use a better naming strategy
+            item_name = "clothing_item"  # you might want to use a better naming strategy
             item_image_path = f"media/closet_items/{item_name}_{x1}_{y1}.jpg"
             item_image.save(item_image_path)
             detected_items.append((item_name, item_image_path))
@@ -108,7 +99,7 @@ class OutfitRecommendationView(generics.ListAPIView):
         serializer = self.get_serializer(recommendation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class VirtualClostestView(generics.ListAPIView):
+class VirtualClosetView(generics.ListAPIView):
     serializer_class = VirtualClosetSerializer
     permission_classes = [IsAuthenticated]
 

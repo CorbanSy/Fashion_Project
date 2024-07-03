@@ -12,7 +12,7 @@
     align-items: center;
 }
 
-.view-outfits-container h2 {
+.view-outfits-container h1 {
     font-size: 2em;
     margin-bottom: 20px;
     background: rgba(0, 0, 0, 0.5);
@@ -20,29 +20,36 @@
     border-radius: 5px;
 }
 
-.outfits-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.outfits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+    padding: 0 20px;
 }
 
-.outfit-item {
+.outfit-cubby {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
-    width: 80%;
     padding: 20px;
     transition: transform 0.2s;
 }
 
-.outfit-item:hover {
+.outfit-cubby:hover {
     transform: scale(1.05);
 }
 
-.outfit-item h3 {
+.outfit-cubby h2 {
     font-size: 1.5em;
     margin-bottom: 10px;
+}
+
+.outfit-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
 }

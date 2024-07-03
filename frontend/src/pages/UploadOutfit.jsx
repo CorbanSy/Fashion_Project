@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { uploadOutfit } from "../api";
+import { uploadOutfit, uploadClothingItem } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/Form.css";
 import LoadingIndicator from "../components/LoadingIndicator";
 
 function UploadOutfit(){
     const [image, setImage] = useState(null);
+    const [clothingImage, setClothingImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -18,7 +19,23 @@ function UploadOutfit(){
         try{
             const res = await uploadOutfit(formData);
             navigate(`/outfits/${res.data.id}/recommendations`);
-        } catch (error){
+        } catch (error) {
+            alert(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleClothingSubmit = async (e) => {
+        setLoading(true);
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", clothingImage);
+
+        try{
+            await uploadClothingItem(formData);
+            alert('Clothin item uploaded successfully!');
+        } catch(error){
             alert(error);
         } finally {
             setLoading(false);
@@ -26,17 +43,31 @@ function UploadOutfit(){
     };
 
     return (
-        <form onSubmit={handleSubmit} className="form-container">
-            <h1>Upload Outfit</h1>
-            <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files[0])}
-                required
-            />
-            {loading && <LoadingIndicator />}
-            <button type="submit" className="form-button">Upload</button>
-        </form>
+        <div>
+            <form onSubmit={handleOutfitSubmit} className="form-container">
+                <h1>Upload Outfit</h1>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setOutfitImage(e.target.files[0])}
+                    required
+                />
+                {loading && <LoadingIndicator />}
+                <button type="submit" className="form-button">Upload</button>
+            </form>
+
+            <form onSubmit={handleClothingSubmit} className="form-container">
+                <h1>Upload Clothing Item</h1>
+                <input
+                    type="file"
+                    accept="image/"
+                    onChange={(e) => setClothingImage(e.target.files[0])}
+                    required
+                />
+                {loading && <LoadingIndicator />}
+                <button type="submit" className="form-button">Upload</button>
+            </form>
+        </div>
     );
 }
 

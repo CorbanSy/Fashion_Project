@@ -1,33 +1,39 @@
-import React, {useState, useEffect} from 'react';
-import api from '../api';
-import '../styles/ViewOutfits.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import "../styles/ViewOutfits.css"; // Make sure you have this CSS file
 
 function ViewOutfits() {
     const [outfits, setOutfits] = useState([]);
 
     useEffect(() => {
-        //Fetch outfits from the backend API
-        api.get('api/outfits/')
-            .then((res) => {
-                setOutfits(res.data);
-            })
-            .catch((err) => console.error('Error fetching outfits:', err));
+        const fetchOutfits = async () => {
+            try {
+                const response = await axios.get('/api/outfits/');
+                if (Array.isArray(response.data)) {
+                    setOutfits(response.data);
+                } else {
+                    console.error('API response is not an array:', response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching outfits:', error);
+            }
+        };
+
+        fetchOutfits();
     }, []);
 
     return (
         <div className="view-outfits-container">
-            <h2>View Outfits</h2>
-            <div className="outfits-list">
-                {outfits.length > 0 ? (
-                    outfits.map((outfit, index) => (
-                        <div key={outfit.id} className="outfit-item">
-                            <h3>{outfit.title || `Outfit #${index + 1}`}</h3>
-                            {/* add more outfit details here */}
-                        </div>
-                    ))
-                ) : (
-                    <p>No outfits available.</p>
-                )}
+            <h1>View Outfits</h1>
+            <div className="outfits-grid">
+                {outfits.map((outfit, index) => (
+                    <div key={outfit.id || index} className="outfit-box">
+                        <h2>{outfit.name || `Outfit ${index + 1}`}</h2>
+                        <img src={outfit.image} alt={outfit.name} />
+                        {/* Add more outfit details as needed */}
+                    </div>
+                ))}
             </div>
         </div>
     );

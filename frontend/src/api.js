@@ -34,6 +34,18 @@ export const uploadOutfit = (formData) => {
 
 export const registerUser = (userData) => {
     return api.post(`/api/user/register/`, userData)
-}
+};
+
+export const loginUser = (userData) => {
+    return api.post(`/api/token`, userData);
+};
+
+export const fetchFashionItems = () => {
+    return api.get(`/api/fashion-items/`);
+};
+
+export const fetchVirtualCloset = () => {
+    return api.get(`/api/virtual-closet/`);
+};
 
 export default api

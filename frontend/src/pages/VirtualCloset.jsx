@@ -30,7 +30,7 @@ function VirtualCloset() {
             .then((data) => {
                 setClosetItems(data);
             })
-            .catch((err) => alert(err));
+            .catch((err) => console.error("error fetching outfits: ", err));
     };
 
     const categorizedItems = categories.map(category => ({
