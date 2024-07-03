@@ -1,10 +1,12 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import './styles/App.css';
 
-function App() {
+function App({ isLoggedIn, onLogout}) {
     return (
         <div className="app">
-            <h1>Fashion Recommendation System</h1>
+            <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout} />
             <Outlet />
         </div>
     );
