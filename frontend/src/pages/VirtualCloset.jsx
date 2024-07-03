@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import api from "../api";
 import Modal from "../components/Modal";
 import "../styles/VirtualCloset.css";
@@ -81,7 +82,7 @@ function VirtualCloset() {
                 <img src={maleMannequin} alt="Male Mannequin" className="mannequin male-mannequin" />
                 <img src={femaleMannequin} alt="Female Mannequin" className="mannequin female-mannequin" />
             </div>
-            <button onClick={handleViewOutfitsClick} className="view-outfits-button">View Outfits</button>
+            <Link to="/view-outfits" className="view-outfits-button">View Outfits</Link>
             <button onClick={handleCreateOutfitClick} className="create-outfit-button">Create Outfit</button>
             <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
 
