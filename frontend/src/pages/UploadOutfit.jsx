@@ -5,16 +5,16 @@ import "../styles/Form.css";
 import LoadingIndicator from "../components/LoadingIndicator";
 
 function UploadOutfit(){
-    const [image, setImage] = useState(null);
+    const [image, setOutfitImage] = useState(null);
     const [clothingImage, setClothingImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleOutfitSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
         const formData = new FormData();
-        formData.append("image", image);
+        formData.append("image", outfitImageimage);
 
         try{
             const res = await uploadOutfit(formData);

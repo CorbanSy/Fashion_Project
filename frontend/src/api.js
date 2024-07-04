@@ -32,6 +32,14 @@ export const uploadOutfit = (formData) => {
     });
 };
 
+export const uploadClothingItem = (formData) => {
+    return api.post("/api/virtual-closet/", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+};
+
 export const registerUser = (userData) => {
     return api.post(`/api/user/register/`, userData)
 };
