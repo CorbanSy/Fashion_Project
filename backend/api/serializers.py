@@ -1,9 +1,14 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
+from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset, UserProfile
 import logging
 
 logger = logging.getLogger(__name__)
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['profile', 'bio']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

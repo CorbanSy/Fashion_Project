@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreateUserView, FashionItemListCreate, UserPreferenceDetail, OutfitListCreateView, OutfitRecommendationView, VirtualClosetView, ImageUploadView
+from .views import UserProfileView, CreateUserView, FashionItemListCreate, UserPreferenceDetail, OutfitListCreateView, OutfitRecommendationView, VirtualClosetView, ImageUploadView
 
 urlpatterns = [
     path('users/', CreateUserView.as_view(), name='create-user'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path("outfits/", OutfitListCreateView.as_view(), name="outfits-list-create"),
     path("virtual-closet/", VirtualClosetView.as_view(), name="virtual-closet"),
     path('upload-image/', ImageUploadView.as_view(), name="upload-image"),
+    path('profile/', UserProfileView.as_view(), name='user-profile'),
 ]

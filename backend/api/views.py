@@ -4,9 +4,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer, VirtualClosetSerializer
+from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer, VirtualClosetSerializer, UserProfileSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
+from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset, UserProfile
 import logging
 import torch
 from torchvision import models, transforms
@@ -16,6 +16,14 @@ from .cnn_model import predict_category
 
 
 logger = logging.getLogger(__name__)
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
