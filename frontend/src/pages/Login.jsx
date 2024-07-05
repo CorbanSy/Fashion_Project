@@ -13,7 +13,7 @@ function Login({ onLogin }){
             <div className="center-wrapper">
                 <h1 className="app-name">StyleSavvy</h1>
                 <div className="form-wrapper">
-                    <Form route="/api/token/" method="login" onLogin={onLogin}/>
+                    <Form route="/token/" method="login" onLogin={onLogin}/>
                 </div>
             </div>
             <div className="carousel-wrapper">

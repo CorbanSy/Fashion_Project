@@ -15,7 +15,7 @@ function Home() {
 
   const getFashionItems = () => {
     api
-        .get("/api/fashion-items/")
+        .get("/fashion-items/")
         .then((res) => res.data)
         .then((data) => {
           setFashionItems(data);

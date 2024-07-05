@@ -9,7 +9,7 @@ function ViewOutfits() {
     useEffect(() => {
         const fetchOutfits = async () => {
             try {
-                const response = await axios.get('/api/outfits/');
+                const response = await axios.get('/outfits/');
                 if (Array.isArray(response.data)) {
                     setOutfits(response.data);
                 } else {

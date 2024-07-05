@@ -25,7 +25,7 @@ function VirtualCloset() {
 
     const getClosetItems = () => {
         api
-            .get("/api/virtual-closet/")
+            .get("/virtual-closet/")
             .then((res) => res.data)
             .then((data) => {
                 setClosetItems(data);
@@ -82,23 +82,25 @@ function VirtualCloset() {
                 <img src={maleMannequin} alt="Male Mannequin" className="mannequin male-mannequin" />
                 <img src={femaleMannequin} alt="Female Mannequin" className="mannequin female-mannequin" />
             </div>
-            <Link to="/view-outfits" className="view-outfits-button">View Outfits</Link>
-            <button onClick={handleCreateOutfitClick} className="create-outfit-button">Create Outfit</button>
-            <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
+            <div className="button-container">
+                <Link to="/view-outfits" className="view-outfits-button">View Outfits</Link>
+                <button onClick={handleCreateOutfitClick} className="create-outfit-button">Create Outfit</button>
+                <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
+            </div>
 
             <Modal isOpen={isViewOutfitsModalOpen} onClose={() => setViewOutfitsModalOpen(false)}>
                 <h2>View Outfits</h2>
-                {/*View outfits content goes here */}
+                {/* View outfits content goes here */}
             </Modal>
 
             <Modal isOpen={isCreateModalOpen} onClose={() => setCreateModalOpen(false)}>
                 <h2>Create Outfit</h2>
-                {/*Outfit creation content goes here */}
+                {/* Outfit creation content goes here */}
             </Modal>
 
             <Modal isOpen={isGenerateModalOpen} onClose={() => setGenerateModalOpen(false)}>
                 <h2>Generate Outfit (AI)</h2>
-                {/*AI outfit generate content goes here */}
+                {/* AI outfit generate content goes here */}
             </Modal>
         </div>
     );

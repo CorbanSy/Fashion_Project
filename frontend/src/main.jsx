@@ -17,14 +17,14 @@ function Main() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem('ACCESS_TOKEN');
+        const token = localStorage.getItem('ACCESS_TOKEN'); // Ensure consistency with the key name
         setIsLoggedIn(!!token);
     }, []);
 
     const handleLogout = () => {
         setIsLoggedIn(false);
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('ACCESS_TOKEN'); // Ensure consistency with the key name
+        localStorage.removeItem('REFRESH_TOKEN'); // Ensure consistency with the key name
     };
 
     const handleLogin = () => {
