@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class FashionItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = FashionItem
-        fields = ["id", "name", "description", "image_url", "created_at", "updated_at"]
+        fields = ["id", "name", "description", "image_url", "created_at", "updated_at", "image", "category"]
 
 class UserPreferencesSerializer(serializers.ModelSerializer):
     class Meta:

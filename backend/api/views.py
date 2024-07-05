@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import FashionItemSerializer, UserPreferencesSerializer, UserSerializer, OutfitSerializer, OutfitRecommendationSerializer, VirtualClosetSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
@@ -10,6 +12,8 @@ import torch
 from torchvision import models, transforms
 from PIL import Image
 import traceback
+from .cnn_model import predict_category
+
 
 logger = logging.getLogger(__name__)
 
@@ -105,3 +109,16 @@ class VirtualClosetView(generics.ListAPIView):
 
     def get_queryset(self):
         return VirtualCloset.objects.filter(user=self.request.user)
+
+class ImageUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = FashionItemSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            image_path = file_serializer.data['image']
+            category = predict_category(image_path)
+            return Response({'category': category}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
