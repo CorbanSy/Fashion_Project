@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
 import '../styles/Chatbot.css';
-import { Configuration, OpenAIapi } from 'openai';
-
-const configuration = new Configuration({
-    apiKey: 'YOUR_OPENAI_API_KEY',// replace with open API key
-});
-
-const openai = new OpenAIapi(configuration);
 
 const Chatbot = () => {
     const [messages, setMessages] = useState([
@@ -19,19 +12,28 @@ const Chatbot = () => {
         setMessages(newMessages);
         setInput('');
 
-        //Get response from OpenAI
+        // Get response from OpenAI
         const response = await getResponseFromOpenAI(input);
-        setMessages([...newMessages, { text: response, sender: 'bot'}]);
+        setMessages([...newMessages, { text: response, sender: 'bot' }]);
     };
 
     const getResponseFromOpenAI = async (input) => {
         try {
-            const completion = await openai.createCompletion({
-                model: "text-davinci-003",
-                prompt: input,
-                max_tokens: 150,
+            const response = await fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer YOUR_OPENAI_API_KEY` // replace with your actual OpenAI API key
+                },
+                body: JSON.stringify({
+                    model: 'text-davinci-003',
+                    prompt: input,
+                    max_tokens: 150,
+                })
             });
-            return completion.data.choices[0].text.trim();
+
+            const data = await response.json();
+            return data.choices[0].text.trim();
         } catch (error) {
             console.error('Error getting response from OpenAI:', error);
             return 'Sorry, I\'m having trouble understanding you right now. Please try again later.';
