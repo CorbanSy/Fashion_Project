@@ -1,8 +1,8 @@
 .profile-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background: rgb(91, 9, 198);
+    background: rgb(88, 6, 197);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -63,13 +63,89 @@ button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #4caf50;
-    color: white;
+    background-color: #5d08dd;
+    color: rgb(15, 8, 220);
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0a32e4;
+}
+
+/* New styles for layout adjustment */
+.profile-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.body-measurements-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.measurements-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.measurements-box .form-group {
+    flex: 1;
+}
+
+.measurements-box .measurements-input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.measurement-image {
+    max-width: 500px;
+    max-height: 500px;
+    object-fit: contain;
+    align-self: center;
+}
+
+.measurement-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.measurement-input {
+    display: flex;
+    align-items: center;
+}
+
+.measurement-input button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 0;
+    padding: 0;
+    border: 1px solid #a70ad6;
+    border-radius: 50%;
+    background-color: #b10ae8;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.measurement-input button:hover {
+    background-color: #e0e0e0;
+}
+
+.measurement-input input {
+    width: 60px;
+    text-align: center;
+}
+
+.color-option {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    vertical-align: middle;
 }
