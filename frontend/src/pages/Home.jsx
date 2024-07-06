@@ -24,22 +24,26 @@ function Home() {
 
   return (
     <div className="page-container">
-      <div className="carousel-wrapper">
-        <ImageCarousel/>
-      </div>
-      <div className="center-wrapper">
+      <div className="header">
         <h1 className="app-name">StyleSavvy</h1>
-        <h2>Fashion Items</h2>
-        <div className="fashion-item-list">
-          {fashionItems.map((item) => (
-            <FashionItem item={item} key={item.id} />
-          ))}
+        <h2 className="sub-title">Fashion Items</h2>
+      </div>
+      <div className="content-wrapper">
+        <div className="carousel-wrapper">
+          <ImageCarousel />
+        </div>
+        <div className="center-wrapper">
+          <div className="fashion-item-list">
+            {fashionItems.map((item) => (
+              <FashionItem item={item} key={item.id} />
+            ))}
+          </div>
+          <Chatbot />
+        </div>
+        <div className="carousel-wrapper">
+          <ImageCarousel />
         </div>
       </div>
-      <div className="carousel-wrapper">
-        <ImageCarousel />
-      </div>
-      <Chatbot /> {/*add the chatbot component */}
     </div>
   );
 }

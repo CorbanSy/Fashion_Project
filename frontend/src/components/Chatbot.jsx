@@ -42,6 +42,14 @@ const Chatbot = () => {
 
     return (
         <div className="chatbot-container">
+            <div className="chatbot-header">
+                <p>Examples of what to ask:</p>
+                <ul>
+                    <li>Where do I go to generate an outfit?</li>
+                    <li>I recently lost some weight and need to change my waist measurements, how do I do that?</li>
+                    <li>I want to upload a new outfit I picked out from the store today, how do I do that?</li>
+                </ul>
+            </div>
             <div className="chatbot-messages">
                 {messages.map((msg, index) => (
                     <div key={index} className={`chatbot-message ${msg.sender}`}>
