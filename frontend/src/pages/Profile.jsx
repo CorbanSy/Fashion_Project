@@ -48,15 +48,36 @@ const bodyMeasurementsOptions = [
     'Bust', 'Upper Bust', 'Neck', 'Hip', 'Length of Skirt'
 ];
 
+const averageMeasurementsInches = {
+    'Full hip': 39,
+    'Waist': 34,
+    'Inseam': 31,
+    'Outseam': 41,
+    'Rise': 10,
+    'Shoulder': 18,
+    'Front Bodice': 20,
+    'Back Bodice': 20,
+    'Arm Length': 25,
+    'Bust': 40,
+    'Upper Bust': 38,
+    'Neck': 15,
+    'Hip': 39,
+    'Length of Skirt': 20
+};
+
+const convertToCm = (inches) => (inches * 2.54).toFixed(1);
+const convertToInches = (cm) => (cm / 2.54).toFixed(1);
+
 function Profile() {
     const [profileData, setProfileData] = useState({
         profile_picture: null,
         bio: '',
         favorite_colors: [],
         favorite_styles: [],
-        body_measurements: {}
+        body_measurements: { ...averageMeasurementsInches }
     });
 
+    const [isInches, setIsInches] = useState(true);
     const [profilePicturePreview, setProfilePicturePreview] = useState(null);
 
     useEffect(() => {
@@ -106,19 +127,15 @@ function Profile() {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        for (let key in profileData) {
-            if (key === "favorite_styles" || key === "favorite_colors" || key === "body_measurements") {
-                formData.append(key, JSON.stringify(profileData[key]));
-            } else {
-                formData.append(key, profileData[key]);
-            }
-        }
-        api.put('/profile/', formData)
-            .then(response => console.log('Profile updated:', response.data))
-            .catch(error => console.error('Error updating profile:', error));
+    const toggleUnit = () => {
+        setProfileData(prevState => ({
+            ...prevState,
+            body_measurements: Object.keys(prevState.body_measurements).reduce((acc, key) => {
+                acc[key] = isInches ? convertToCm(prevState.body_measurements[key]) : convertToInches(prevState.body_measurements[key]);
+                return acc;
+            }, {})
+        }));
+        setIsInches(!isInches);
     };
 
     const formatBodyMeasurements = () => {
@@ -174,7 +191,7 @@ function Profile() {
                 <div className="body-measurements-container">
                     <div className="measurements-box">
                         <div className="form-group">
-                            <label>Body Measurements</label>
+                            <label>Body Measurements <button type="button" onClick={toggleUnit}>Convert to {isInches ? 'cm' : 'inches'}</button></label>
                             <div className="measurements-input-container">
                                 {formatBodyMeasurements()}
                             </div>

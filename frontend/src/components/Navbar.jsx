@@ -5,6 +5,7 @@ import "../styles/Navbar.css";
 function Navbar({ isLoggedIn, onLogout }) {
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
     const handleLogout = () => {
         onLogout();
@@ -13,6 +14,10 @@ function Navbar({ isLoggedIn, onLogout }) {
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
+    };
+
+    const toggleProfileDropdown = () => {
+        setProfileDropdownOpen(!profileDropdownOpen);
     };
 
     return (
@@ -43,7 +48,22 @@ function Navbar({ isLoggedIn, onLogout }) {
                 </li>
                 {isLoggedIn && (
                     <li className="nav-item">
-                        <Link to="/profile" className="nav-link">Profile</Link>
+                        <div
+                            className='nav-link'
+                            onMouseEnter={toggleProfileDropdown}
+                            onMouseLeave={toggleProfileDropdown}
+                        >
+                            Profile
+                            {profileDropdownOpen && (
+                                <div className='dropdown-menu'>
+                                    <Link to="/profile#profile-picutre" className='dropdown-item'>Profile Picture</Link>
+                                    <Link to="/profile#bio" className='dropdown-item'>Bio</Link>
+                                    <Link to="/profile#favorite-colors" className="dropdown-item">Favorite Colors</Link>
+                                    <Link to="/profile#favorite-styles" className="dropdown-item">Favorite Styles</Link>
+                                    <Link to="/profile#body-measurements" className="dropdown-item">Body Measurements</Link>
+                                </div>
+                            )}
+                        </div>
                     </li>
                 )}
                 <li className="nav-item">
