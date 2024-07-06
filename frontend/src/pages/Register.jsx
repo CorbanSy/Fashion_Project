@@ -13,7 +13,7 @@ function Register() {
             <div className="center-wrapper">
                 <h1 className="app-name">StyleSavvy</h1>
                 <div className="form-wrapper">
-                    <Form route="/api/user/register/" method="register" />
+                    <Form route="/user/register/" method="register" />
                 </div>
             </div>
             <div className="carousel-wrapper">

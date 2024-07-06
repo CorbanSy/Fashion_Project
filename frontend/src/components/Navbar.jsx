@@ -41,6 +41,11 @@ function Navbar({ isLoggedIn, onLogout }) {
                 <li className="nav-item">
                     <Link to="/rate-outfit" className="nav-link">Rate My Outfit</Link>
                 </li>
+                {isLoggedIn && (
+                    <li className="nav-item">
+                        <Link to="/profile" className="nav-link">Profile</Link>
+                    </li>
+                )}
                 <li className="nav-item">
                     {isLoggedIn ? (
                         <button onClick={handleLogout} className="nav-link">Logout</button>

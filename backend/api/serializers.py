@@ -1,9 +1,15 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset
+from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset, UserProfile
 import logging
 
 logger = logging.getLogger(__name__)
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['profile', 'bio', 'favorite_colors', 'favorite_styles', 'body_measurements']
+        extra_kwargs = {'user':{'read_only': True}}
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 class FashionItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = FashionItem
-        fields = ["id", "name", "description", "image_url", "created_at", "updated_at"]
+        fields = ["id", "name", "description", "image_url", "created_at", "updated_at", "image", "category"]
 
 class UserPreferencesSerializer(serializers.ModelSerializer):
     class Meta:

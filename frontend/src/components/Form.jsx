@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css";
 import LoadingIndicator from "./LoadingIndicator";
 
-function Form({ route, method}) {
+function Form({ route, method, onLogin }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -18,14 +18,16 @@ function Form({ route, method}) {
         e.preventDefault();
 
         try {
-            if (method === "register"){
-                await registerUser({ username, password});
+            if (method === "register") {
+                await registerUser({ username, password });
                 navigate("/login");
-            } else if (method === "login");
-                const res = await api.post(route, {username, password});
+            } else if (method === "login") {
+                const res = await api.post(route, { username, password });
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+                onLogin(); // Notify the parent component of a successful login
                 navigate("/");
+            }
         } catch (error) {
             console.error('Error:', error);
             alert(error.response ? error.response.data.detail : error.message);
