@@ -32,6 +32,7 @@
 }
 
 .dropdown-menu {
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -50,4 +51,8 @@
 
 .dropdown-item:hover {
     background-color: #f0f0f0;
+}
+
+.nav-item:hover .dropdown-menu {
+    display: block;
 }

@@ -1,10 +1,13 @@
 .profile-container {
-    max-width: 600px;
+    max-width: 1000px; /* Increase the max-width for less crowded layout */
     margin: 0 auto;
     padding: 20px;
-    background: white;
+    background: rgb(88, 6, 197);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the entire content */
 }
 
 .profile-container h2 {
@@ -12,10 +15,11 @@
     margin-bottom: 20px;
 }
 
-.profile-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.profile-form-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .form-group {
@@ -29,7 +33,8 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -45,11 +50,24 @@
     height: 100px;
 }
 
+.form-group select[multiple] {
+    height: auto;
+    min-height: 100px;
+}
+
+.profile-picture-preview {
+    margin-top: 10px;
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #4caf50;
+    background-color: #5d08dd;
     color: white;
     font-size: 16px;
     cursor: pointer;
@@ -57,5 +75,83 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0a32e4;
+}
+
+.body-measurements-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.measurements-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.measurements-box .form-group {
+    margin: 0;
+}
+
+.measurements-box .measurements-input-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+}
+
+.measurement-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.measurement-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.measurement-input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.measurement-input button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 0;
+    padding: 0;
+    border: 1px solid #a70ad6;
+    border-radius: 50%;
+    background-color: #b10ae8;
+    cursor: pointer;
+}
+
+.measurement-input button:hover {
+    background-color: #e0e0e0;
+}
+
+.measurement-input input {
+    width: 60px;
+    text-align: center;
+}
+
+.color-option {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* New CSS for the Save Profile button */
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
