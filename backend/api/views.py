@@ -23,7 +23,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return self.request.user.profile
+        return UserProfile.objects.get(user=self.request.user)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()

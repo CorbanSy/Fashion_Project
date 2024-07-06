@@ -5,6 +5,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     bio = models.TextField(blank=True)
+    favorite_colors = models.CharField(max_length=200, blank=True)
+    favorite_styles = models.CharField(max_length=200, blank=True)
+    body_measurements = models.JSONField(default=dict, blank=True)
 
     def __str__(self):
         return self.user.username
@@ -15,7 +18,7 @@ class FashionItem(models.Model):
     image_url = models.URLField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    image = models.ImageField(upload_to='fashion_items/')
+    image = models.ImageField(upload_to='fashion_items/', default='fashion_items/default_image.jpg')
     category = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
