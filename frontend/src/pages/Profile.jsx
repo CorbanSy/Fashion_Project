@@ -82,7 +82,13 @@ function Profile() {
 
     useEffect(() => {
         api.get('/profile/')
-            .then(response => setProfileData(response.data))
+            .then(response => {
+                const data = response.data;
+                if (data.body_measurements) {
+                    data.body_measurements = JSON.parse(data.body_measurements);
+                }
+                setProfileData(data);
+            })
             .catch(error => console.error('Error fetching profile:', error));
     }, []);
 
@@ -156,6 +162,21 @@ function Profile() {
         ));
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        for (let key in profileData) {
+            if (key === "favorite_styles" || key === "favorite_colors" || key === "body_measurements") {
+                formData.append(key, JSON.stringify(profileData[key]));
+            } else {
+                formData.append(key, profileData[key]);
+            }
+        }
+        api.put('/profile/', formData)
+            .then(response => console.log('Profile updated:', response.data))
+            .catch(error => console.error('Error updating profile:', error));
+    };
+
     return (
         <div className="profile-container">
             <h2>Profile</h2>
@@ -174,7 +195,6 @@ function Profile() {
                     <select name="favorite_colors" value={profileData.favorite_colors} onChange={handleChange} multiple>
                         {colorsOptions.map((color, index) => (
                             <option key={index} value={color.name}>
-                                <span className="color-option" style={{ backgroundColor: color.color }}></span>
                                 {color.name}
                             </option>
                         ))}
@@ -197,9 +217,11 @@ function Profile() {
                             </div>
                         </div>
                     </div>
-                    <img src={measurementImage} alt="Body Measurements Guide" className="measurement-image" />
                 </div>
-                <button type="submit">Save Profile</button>
+                <img src={measurementImage} alt="Body Measurements Guide" className="measurement-image" />
+                <div className="button-container">
+                    <button type="submit">Save Profile</button>
+                </div>
             </form>
         </div>
     );

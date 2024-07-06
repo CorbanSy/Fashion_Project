@@ -1,10 +1,13 @@
 .profile-container {
-    max-width: 800px;
+    max-width: 1000px; /* Increase the max-width for less crowded layout */
     margin: 0 auto;
     padding: 20px;
     background: rgb(88, 6, 197);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the entire content */
 }
 
 .profile-container h2 {
@@ -12,10 +15,11 @@
     margin-bottom: 20px;
 }
 
-.profile-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.profile-form-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .form-group {
@@ -64,7 +68,7 @@ button {
     border: none;
     border-radius: 5px;
     background-color: #5d08dd;
-    color: rgb(15, 8, 220);
+    color: white;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -74,50 +78,45 @@ button:hover {
     background-color: #0a32e4;
 }
 
-/* New styles for layout adjustment */
-.profile-form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .body-measurements-container {
     display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .measurements-box {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .measurements-box .form-group {
-    flex: 1;
+    margin: 0;
 }
 
 .measurements-box .measurements-input-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
 }
 
 .measurement-image {
-    max-width: 500px;
-    max-height: 500px;
+    max-width: 100%;
+    height: auto;
     object-fit: contain;
-    align-self: center;
 }
 
 .measurement-input-group {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
 }
 
 .measurement-input {
     display: flex;
     align-items: center;
+    gap: 5px;
 }
 
 .measurement-input button {
@@ -130,7 +129,6 @@ button:hover {
     border-radius: 50%;
     background-color: #b10ae8;
     cursor: pointer;
-    margin: 0 5px;
 }
 
 .measurement-input button:hover {
@@ -148,4 +146,12 @@ button:hover {
     height: 15px;
     margin-right: 5px;
     vertical-align: middle;
+}
+
+/* New CSS for the Save Profile button */
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
