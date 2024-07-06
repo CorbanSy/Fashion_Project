@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['profile', 'bio', 'favorite_colors', 'favorite_styles', 'body_measurements']
+        fields = ['profile_picture', 'bio', 'favorite_colors', 'favorite_styles', 'body_measurements']
         extra_kwargs = {'user':{'read_only': True}}
 
 class UserSerializer(serializers.ModelSerializer):
