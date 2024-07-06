@@ -101,7 +101,7 @@ button:hover {
 }
 
 .measurement-image {
-    max-width: 100%;
+    max-width: 85%;
     height: auto;
     object-fit: contain;
 }
@@ -148,8 +148,8 @@ button:hover {
     vertical-align: middle;
 }
 
-/* New CSS for the Save Profile button */
-.button-container {
+/* New CSS for the Save Profile button specific to profile page */
+.profile-button-container {
     width: 100%;
     display: flex;
     justify-content: center;
