@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import api from "../api";
 import FashionItem from "../components/FashionItem";
-import "../styles/Home.css"
 import ImageCarousel from "../components/Carousel";
 import Chatbot from "../components/Chatbot";
+import ConveyorBeltCarousel from "../components/ConveyorBeltCarousel";
+import "../styles/Home.css"
 
 function Home() {
   const [fashionItems, setFashionItems] = useState([]);
@@ -44,6 +45,7 @@ function Home() {
           <ImageCarousel />
         </div>
       </div>
+      <ConveyorBeltCarousel />
     </div>
   );
 }

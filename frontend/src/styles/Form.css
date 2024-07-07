@@ -82,3 +82,8 @@
 .upload-box button:hover {
     background-color: #2575fc; /* Matching gradient color */
 }
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
