@@ -4,7 +4,7 @@ import FashionItem from "../components/FashionItem";
 import ImageCarousel from "../components/Carousel";
 import Chatbot from "../components/Chatbot";
 import ConveyorBeltCarousel from "../components/ConveyorBeltCarousel";
-import "../styles/Home.css"
+import "../styles/Home.css";
 
 function Home() {
   const [fashionItems, setFashionItems] = useState([]);
@@ -15,12 +15,12 @@ function Home() {
 
   const getFashionItems = () => {
     api
-        .get("/fashion-items/")
-        .then((res) => res.data)
-        .then((data) => {
-          setFashionItems(data);
-        })
-        .catch((err) => alert(err));
+      .get("/fashion-items/")
+      .then((res) => res.data)
+      .then((data) => {
+        setFashionItems(data);
+      })
+      .catch((err) => alert(err));
   };
 
   return (
@@ -39,14 +39,17 @@ function Home() {
               <FashionItem item={item} key={item.id} />
             ))}
           </div>
-          <Chatbot />
         </div>
         <div className="carousel-wrapper">
           <ImageCarousel />
         </div>
       </div>
       <ConveyorBeltCarousel />
+      <div className="chatbot-wrapper">
+        <Chatbot />
+      </div>
     </div>
   );
 }
+
 export default Home;

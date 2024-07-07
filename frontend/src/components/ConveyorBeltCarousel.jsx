@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import 'react-multi-carousel/lib/styles.css';
 import api from '../api';
-import '../styles/ConveyorBeltCarousel.css';  // Import the CSS file
-
+import '../styles/ConveyorBeltCarousel.css'
 const ConveyorBeltCarousel = () => {
     const [items, setItems] = useState([]);
 
@@ -27,11 +26,11 @@ const ConveyorBeltCarousel = () => {
         },
         desktop: {
             breakpoint: { max: 1024, min: 768 },
-            items: 3
+            items: 5
         },
         tablet: {
             breakpoint: { max: 768, min: 464 },
-            items: 2
+            items: 3
         },
         mobile: {
             breakpoint: { max: 464, min: 0 },
@@ -44,12 +43,23 @@ const ConveyorBeltCarousel = () => {
         { item_name: "Upload Clothing or Upload Outfit", item_image: "" },
         { item_name: "Upload Clothing or Upload Outfit", item_image: "" },
         { item_name: "Upload Clothing or Upload Outfit", item_image: "" },
-    ]
+        { item_name: "Upload Clothing or Upload Outfit", item_image: "" },
+    ];
 
     return (
         <div className="carousel-container">
-            <h2>Your Outfits and Clothing Items</h2>
-            <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={2000} showDots={true}>
+            <Carousel
+                responsive={responsive}
+                infinite={true}
+                autoPlay={true}
+                autoPlaySpeed={2000}
+                showDots={false}
+                arrows={false}
+                customTransition="transform 1s ease-in-out"
+                transitionDuration={1000}
+                centerMode={true}
+                additionalTransfrom={-50}
+            >
                 {(items.length > 0 ? items : placeholders).map((item, index) => (
                     <div key={index} className="carousel-item">
                         <div className={`image-placeholder ${index === 2 ? "middle" : index === 1 || index === 3 ? "side" : "outer"}`}>

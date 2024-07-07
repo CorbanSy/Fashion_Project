@@ -1,7 +1,8 @@
 .chatbot-container {
     position: absolute;
-    bottom: 350px;
-    right: 650px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 300px;
     background: rgb(143, 8, 206);
     border-radius: 8px;

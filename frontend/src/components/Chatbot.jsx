@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Chatbot.css';
 
 const Chatbot = () => {
@@ -6,6 +6,18 @@ const Chatbot = () => {
         { text: 'Hi! How can I help you today?', sender: 'bot' }
     ]);
     const [input, setInput] = useState('');
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const chatbot = document.querySelector('.chatbot-container');
+            chatbot.style.bottom = `${20 + window.scrollY}px`; // Adjust this value as needed
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     const handleSendMessage = async () => {
         const newMessages = [...messages, { text: input, sender: 'user' }];
