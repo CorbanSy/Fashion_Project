@@ -219,7 +219,7 @@ function Profile() {
                     </div>
                 </div>
                 <img src={measurementImage} alt="Body Measurements Guide" className="measurement-image" />
-                <div className="button-container">
+                <div className="profile-button-container">
                     <button type="submit">Save Profile</button>
                 </div>
             </form>

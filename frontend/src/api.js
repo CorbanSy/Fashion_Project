@@ -21,11 +21,11 @@ api.interceptors.request.use(
 );
 
 export const getOutfitRecommendations = (outfitId) => {
-    return api.get(`/outfits/${outfitId}/recommendations`);
+    return api.get(`/outfits/${outfitId}/recommendations/`);
 };
 
 export const uploadOutfit = (formData) => {
-    return api.post("/outfits", formData, {
+    return api.post("/outfits/", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },
@@ -33,7 +33,7 @@ export const uploadOutfit = (formData) => {
 };
 
 export const uploadClothingItem = (formData) => {
-    return api.post("/virtual-closet", formData, {
+    return api.post("/virtual-closet/", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },
@@ -41,19 +41,19 @@ export const uploadClothingItem = (formData) => {
 };
 
 export const registerUser = (userData) => {
-    return api.post(`/user/register`, userData);
+    return api.post(`/user/register/`, userData);
 };
 
 export const loginUser = (userData) => {
-    return api.post(`/token`, userData);
+    return api.post(`/token/`, userData);
 };
 
 export const fetchFashionItems = () => {
-    return api.get(`/fashion-items`);
+    return api.get(`/fashion-items/`);
 };
 
 export const fetchVirtualCloset = () => {
-    return api.get(`/virtual-closet`);
+    return api.get(`/virtual-closet/`);
 };
 
 export default api;

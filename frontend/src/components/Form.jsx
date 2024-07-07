@@ -9,6 +9,7 @@ function Form({ route, method, onLogin }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Create Account";
@@ -16,7 +17,7 @@ function Form({ route, method, onLogin }) {
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
-
+        setError("")
         try {
             if (method === "register") {
                 await registerUser({ username, password });
