@@ -4,6 +4,9 @@ import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
 
+# Check if GPU is available
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 # Define the CNN model
 class ConvolutionalNetwork(nn.Module):
     def __init__(self):
@@ -30,11 +33,12 @@ class ConvolutionalNetwork(nn.Module):
 
 # Define the categories based on the order from training
 categories = ['Blazer', 'Blouse', 'Body', 'Dress', 'Hat', 'Hoodie', 'Longsleeve', 'Not sure', 'Other', 'Outwear',
-            'Pants', 'Polo', 'Shirt', 'Shoes', 'Shorts', 'Skip', 'Skirt', 'T-Shirt', 'Top', 'Undershirt']
+              'Pants', 'Polo', 'Shirt', 'Shoes', 'Shorts', 'Skip', 'Skirt', 'T-Shirt', 'Top', 'Undershirt']
 
 # Load the trained model
 model = ConvolutionalNetwork()
-model.load_state_dict(torch.load('cnn_model.pth'))
+model.load_state_dict(torch.load('cnn_model.pth', map_location=device))
+model.to(device)
 model.eval()
 
 # Define the image transformation
@@ -48,9 +52,11 @@ def predict_image(image_path):
     image = Image.open(image_path).convert('RGB')
     image = transform(image)
     image = image.unsqueeze(0)  # Add batch dimension
+    image = image.to(device)  # Move the image tensor to the device (CPU/GPU)
 
     # Make a prediction
-    output = model(image)
+    with torch.no_grad():
+        output = model(image)
     _, predicted = torch.max(output.data, 1)
 
     # Return the predicted category
@@ -59,6 +65,6 @@ def predict_image(image_path):
 
 if __name__ == "__main__":
     # Example usage
-    image_path = 'path/to/your/image.jpg'  # Update this path to your image
+    image_path = r'C:\Users\corba\Fashion_Project\backend\data\test_image.jpg'  # Update this path to your image
     prediction = predict_image(image_path)
     print(f'The model predicts the category: {prediction}')
