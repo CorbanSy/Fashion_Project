@@ -9,7 +9,7 @@ import femaleMannequin from "../assets/female-Mannequin.webp";
 
 const categories = [
     { name: "Hats", subcategories: ["Hat"] },
-    { name: "Tops", subcategories: ["Blazer", "Blouse", "Body", "Dress", "Hoodie", "Longsleeve", "Outwear", "Polo", "Shirt", "T-Shirt", "Top", "Undershirt"] },
+    { name: "Tops", subcategories: ["Blazer", "Blouse", "Body", "Dress", "Hoodie", "Longsleeve", "Outwear", "Pants", "Polo", "Shirt", "T-Shirt", "Top", "Undershirt"] },
     { name: "Bottoms", subcategories: ["Shorts", "Skirt", "Pants"] },
     { name: "Shoes", subcategories: ["Shoes"] },
     { name: "Not Sure/Other", subcategories: ["Not sure", "Other", "Skip"] },
@@ -22,6 +22,7 @@ function VirtualCloset() {
     const [selectedCategoryItems, setSelectedCategoryItems] = useState([]);
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [categoryModalTitle, setCategoryModalTitle] = useState("");
+    const [expandedCategories, setExpandedCategories] = useState({});
 
     useEffect(() => {
         getClosetItems();
@@ -52,18 +53,30 @@ function VirtualCloset() {
         setCategoryModalOpen(true);
     };
 
+    const toggleCategory = (categoryName) => {
+        setExpandedCategories(prevState => ({
+            ...prevState,
+            [categoryName]: !prevState[categoryName]
+        }));
+    };
+
     return (
         <div className="virtual-closet-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
-            <h2>Your Virtual Closet</h2>
+            <h2 className="virtual-closet-title">Your Virtual Closet</h2>
             <div className="button-list">
                 {categories.map(({ name, subcategories }) => (
                     <div key={name} className="category-section">
-                        <h3>{name}</h3>
-                        {subcategories.map(subcategory => (
-                            <button key={subcategory} className="closet-button" onClick={() => handleSubcategoryClick(subcategory)}>
-                                {subcategory}
-                            </button>
-                        ))}
+                        <div className="category-header" onClick={() => toggleCategory(name)}>
+                            <h3>{name}</h3>
+                            <span>{expandedCategories[name] ? '▲' : '▼'}</span>
+                        </div>
+                        <div className={`subcategory-list ${expandedCategories[name] ? 'show' : ''}`}>
+                            {subcategories.map(subcategory => (
+                                <button key={subcategory} className="closet-button" onClick={() => handleSubcategoryClick(subcategory)}>
+                                    {subcategory}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </div>

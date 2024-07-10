@@ -2,7 +2,7 @@
     padding: 20px;
     width: 100vw;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -11,39 +11,69 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+    margin-top: 80px; /* Adds margin to account for the navbar height */
 }
 
-.virtual-closet-container h2 {
+.virtual-closet-title {
     font-size: 2em;
     margin-bottom: 20px;
     background: rgba(0, 0, 0, 0.5);
     padding: 10px;
     border-radius: 5px;
+    position: relative; /* Ensures the title stays within the flow of the document */
+    z-index: 1; /* Ensures the title is above other elements */
+    width: 100%; /* Takes full width */
+    text-align: center; /* Centers the text */
 }
 
 .button-list {
-    position: absolute;
-    top: 100px;
-    left: 20px;
+    margin-top: 0px; /* Adjusted to move buttons up */
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    padding-top: 0px; /* Reduced space for the sticky title */
+    box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
 }
 
 .category-section {
+    display: flex;
+    align-items: center;
     width: 100%;
     max-width: 800px;
+    flex-wrap: wrap;
 }
 
-.category-section h3 {
+.category-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.category-header h3 {
     font-size: 1.5em;
     margin: 10px 0;
     background: rgba(0, 0, 0, 0.5);
     padding: 5px;
     border-radius: 5px;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.subcategory-list {
+    display: none;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.subcategory-list.show {
+    display: flex;
 }
 
 .closet-button {
@@ -55,6 +85,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
+    text-align: center;
 }
 
 .closet-button:hover {
@@ -103,34 +134,35 @@
 
 .mannequin-container {
     position: absolute;
-    top: 20px;
-    right: 20px; /* Adjust as necessary */
+    top: 100px; /* Adjusted to ensure mannequins are not blocking other elements */
+    right: 20px;
     display: flex;
     justify-content: space-between;
-    width: 150px; /* Adjust as necessary */
-    pointer-events: none; /* Ensure they don't interfere with clicking buttons */
+    width: 150px;
+    pointer-events: none;
 }
 
 .mannequin {
-    width: 75px; /* Adjust as necessary */
+    width: 75px;
     height: auto;
 }
 
 .male-mannequin {
-    margin-right: 10px; /* Adjust as necessary */
+    margin-right: 10px;
 }
 
 .female-mannequin {
-    margin-left: 10px; /* Adjust as necessary */
+    margin-left: 10px;
 }
 
 .button-container {
-    position: absolute;
+    position: fixed; /* Changed to fixed to ensure visibility */
     bottom: 20px;
     right: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    z-index: 2; /* Ensures the buttons are above other elements */
 }
 
 .view-outfits-button,
@@ -150,7 +182,6 @@
 .generate-outfit-button:hover {
     background-color: #a50ed3;
 }
-
 
 .modal-overlay {
     position: fixed;
