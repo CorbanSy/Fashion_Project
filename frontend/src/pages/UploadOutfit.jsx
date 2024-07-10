@@ -1,4 +1,3 @@
-// UploadOutfit.jsx
 import { useState } from "react";
 import { uploadOutfit, uploadClothingItem } from "../api";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +36,7 @@ function UploadOutfit() {
             const res = await uploadOutfit(formData);
             navigate(`/outfits/${res.data.id}/recommendations`);
         } catch (error) {
+            console.error("Outfit upload error:", error);
             alert(error);
         } finally {
             setLoading(false);
@@ -48,12 +48,14 @@ function UploadOutfit() {
         e.preventDefault();
         const formData = new FormData();
         formData.append("item_image", clothingImage);
+        console.log("Submitting form data:", formData);
 
         try {
             const res = await uploadClothingItem(formData);
             setDetectedCategory(res.data.category);  // Set the detected category from the response
             alert(`Clothing item uploaded successfully! Detected category: ${res.data.category}`);
         } catch (error) {
+            console.error("Clothing upload error:", error);
             alert(error);
         } finally {
             setLoading(false);

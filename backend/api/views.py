@@ -1,3 +1,4 @@
+# views.py
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status, serializers
@@ -24,6 +25,8 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         user_profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        if created:
+            logger.info(f"UserProfile created for user: {self.request.user}")
         return user_profile
 
 class CreateUserView(generics.CreateAPIView):
@@ -121,19 +124,31 @@ class VirtualClosetView(generics.ListCreateAPIView):
         return VirtualCloset.objects.filter(user=self.request.user)
     
     def perform_create(self, serializer):
+        logger.info(f"Request data: {self.request.data}")
         image = self.request.data.get('item_image')
         if not image:
             logger.error('No image provided in the request')
             raise serializers.ValidationError('No image provided')
-        category = predict_image(image)  # Predict the category using the CNN model
+        logger.info(f"Image provided: {image}")
+        try:
+            category = predict_image(image)  # Predict the category using the CNN model
+        except Exception as e:
+            logger.error(f"Error in prediction: {str(e)}")
+            raise serializers.ValidationError('Error in prediction')
         logger.info(f'Detected category: {category}')
-        serializer.save(user=self.request.user, category=category)
+        try:
+            serializer.save(user=self.request.user, category=category)
+        except Exception as e:
+            logger.error(f"Error saving serializer: {str(e)}")
+            raise serializers.ValidationError('Error saving serializer')
+        logger.info(f"Saved item: {serializer.data}")
         return Response({'category': category, **serializer.data}, status=status.HTTP_201_CREATED)
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
+        logger.info(f"Request data: {request.data}")
         file_serializer = FashionItemSerializer(data=request.data)
         if file_serializer.is_valid():
             file_serializer.save()
@@ -141,4 +156,5 @@ class ImageUploadView(APIView):
             category = predict_image(image_path)
             return Response({'category': category}, status=status.HTTP_201_CREATED)
         else:
+            logger.error(f"Validation errors: {file_serializer.errors}")
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

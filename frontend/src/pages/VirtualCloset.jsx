@@ -8,10 +8,10 @@ import maleMannequin from "../assets/male-Mannequin.webp";
 import femaleMannequin from "../assets/female-Mannequin.webp";
 
 const categories = [
-    { name: "Hats", subcategories: ["Hat", "Beanie"] },
-    { name: "Tops", subcategories: ["Blazer", "Blouse", "Body", "Dress", "Hoodie", "Longsleeve", "Outwear", "Pants", "Polo", "Shirt", "T-Shirt", "Top", "Undershirt"] },
-    { name: "Bottoms", subcategories: ["Jeans", "Shorts", "Trunks", "Slacks", "Skirt"] },
-    { name: "Shoes", subcategories: ["Shoes", "Heels", "Flip Flops", "Sandals"] },
+    { name: "Hats", subcategories: ["Hat"] },
+    { name: "Tops", subcategories: ["Blazer", "Blouse", "Body", "Dress", "Hoodie", "Longsleeve", "Outwear", "Polo", "Shirt", "T-Shirt", "Top", "Undershirt"] },
+    { name: "Bottoms", subcategories: ["Shorts", "Skirt", "Pants"] },
+    { name: "Shoes", subcategories: ["Shoes"] },
     { name: "Not Sure/Other", subcategories: ["Not sure", "Other", "Skip"] },
 ];
 
