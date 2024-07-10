@@ -8,10 +8,11 @@ import maleMannequin from "../assets/male-Mannequin.webp";
 import femaleMannequin from "../assets/female-Mannequin.webp";
 
 const categories = [
-    { name: "Hats", subcategories: ["Hat", "Not sure", "Other", "Outwear"] },
-    { name: "Tops", subcategories: ["Polo", "Shirt","T-Shirt", "Top","Blazer", "Blouse", "Body", "Dress","Hoodie", "Longsleeve"] },
-    { name: "Bottoms", subcategories: ["Skip", "Skirt", "Undershirt", "Shorts","Pants"] },
-    { name: "Shoes", subcategories: ["Heels", "Flip Flops", "Sandals", "Shoes"] },
+    { name: "Hats", subcategories: ["Hat", "Beanie"] },
+    { name: "Tops", subcategories: ["Blazer", "Blouse", "Body", "Dress", "Hoodie", "Longsleeve", "Outwear", "Pants", "Polo", "Shirt", "T-Shirt", "Top", "Undershirt"] },
+    { name: "Bottoms", subcategories: ["Jeans", "Shorts", "Trunks", "Slacks", "Skirt"] },
+    { name: "Shoes", subcategories: ["Shoes", "Heels", "Flip Flops", "Sandals"] },
+    { name: "Not Sure/Other", subcategories: ["Not sure", "Other", "Skip"] },
 ];
 
 function VirtualCloset() {

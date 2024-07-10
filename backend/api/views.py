@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework import generics, status
+from rest_framework import generics, status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -112,7 +112,7 @@ class OutfitRecommendationView(generics.ListAPIView):
         serializer = self.get_serializer(recommendation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class VirtualClosetView(generics.ListAPIView):
+class VirtualClosetView(generics.ListCreateAPIView):
     serializer_class = VirtualClosetSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
@@ -120,12 +120,15 @@ class VirtualClosetView(generics.ListAPIView):
     def get_queryset(self):
         return VirtualCloset.objects.filter(user=self.request.user)
     
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        image = self.request.data.get('item_image')
+        if not image:
+            logger.error('No image provided in the request')
+            raise serializers.ValidationError('No image provided')
+        category = predict_image(image)  # Predict the category using the CNN model
+        logger.info(f'Detected category: {category}')
+        serializer.save(user=self.request.user, category=category)
+        return Response({'category': category, **serializer.data}, status=status.HTTP_201_CREATED)
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)

@@ -1,3 +1,4 @@
+// UploadOutfit.jsx
 import { useState } from "react";
 import { uploadOutfit, uploadClothingItem } from "../api";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +11,7 @@ function UploadOutfit() {
     const [clothingImage, setClothingImage] = useState(null);
     const [outfitImagePreview, setOutfitImagePreview] = useState(null);
     const [clothingImagePreview, setClothingImagePreview] = useState(null);
-    const [clothingItemName, setClothingItemName] = useState("");  // New state for clothing item name
+    const [detectedCategory, setDetectedCategory] = useState(null);  // New state for detected category
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -24,10 +25,6 @@ function UploadOutfit() {
         const file = e.target.files[0];
         setClothingImage(file);
         setClothingImagePreview(URL.createObjectURL(file));
-    };
-
-    const handleClothingItemNameChange = (e) => {  // Handler for clothing item name change
-        setClothingItemName(e.target.value);
     };
 
     const handleOutfitSubmit = async (e) => {
@@ -50,12 +47,12 @@ function UploadOutfit() {
         setLoading(true);
         e.preventDefault();
         const formData = new FormData();
-        formData.append("item_name", clothingItemName);  // Ensure the item name is included
         formData.append("item_image", clothingImage);
 
         try {
-            await uploadClothingItem(formData);
-            alert('Clothing item uploaded successfully!');
+            const res = await uploadClothingItem(formData);
+            setDetectedCategory(res.data.category);  // Set the detected category from the response
+            alert(`Clothing item uploaded successfully! Detected category: ${res.data.category}`);
         } catch (error) {
             alert(error);
         } finally {
@@ -83,13 +80,6 @@ function UploadOutfit() {
             <form onSubmit={handleClothingSubmit} className="form-container">
                 <h1>Upload Clothing Item</h1>
                 <input
-                    type="text"
-                    placeholder="Clothing Item Name"
-                    value={clothingItemName}
-                    onChange={handleClothingItemNameChange}
-                    required
-                />
-                <input
                     type="file"
                     accept="image/*"
                     onChange={handleClothingImageChange}
@@ -101,6 +91,12 @@ function UploadOutfit() {
                 {loading && <LoadingIndicator />}
                 <button type="submit" className="form-button">Upload</button>
             </form>
+
+            {detectedCategory && (
+                <div className="detected-category">
+                    <h2>Detected Category: {detectedCategory}</h2>
+                </div>
+            )}
         </div>
     );
 }
