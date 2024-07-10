@@ -1,7 +1,7 @@
 .virtual-closet-container {
     padding: 20px;
     width: 100vw;
-    margin: 0 auto;
+    margin: 80px auto 0 auto; /* Adjusted margin to account for the fixed navbar */
     text-align: left;
     background-size: cover;
     background-repeat: no-repeat;
@@ -14,7 +14,6 @@
     justify-content: flex-start;
     align-items: center;
     box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
-    margin-top: 80px; /* Adds margin to account for the navbar height */
 }
 
 .virtual-closet-title {

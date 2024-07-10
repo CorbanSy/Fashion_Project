@@ -1,13 +1,13 @@
 .profile-container {
-    max-width: 1000px; /* Increase the max-width for less crowded layout */
-    margin: 0 auto;
+    max-width: 1000px;
+    margin: 200px auto 0 auto; /* This margin-top should account for the navbar height */
     padding: 20px;
     background: rgb(88, 6, 197);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center the entire content */
+    align-items: center;
 }
 
 .profile-container h2 {
@@ -148,7 +148,6 @@ button:hover {
     vertical-align: middle;
 }
 
-/* New CSS for the Save Profile button specific to profile page */
 .profile-button-container {
     width: 100%;
     display: flex;

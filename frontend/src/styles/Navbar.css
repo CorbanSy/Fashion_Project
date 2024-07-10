@@ -5,6 +5,11 @@
     background-color: #4b0082;
     padding: 10px 20px;
     color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px; /* Ensure this height matches the margin-top adjustment */
+    z-index: 1000;
 }
 
 .navbar-brand {
