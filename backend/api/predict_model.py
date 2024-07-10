@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
+import os
 
 # Check if GPU is available
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -37,7 +38,8 @@ categories = ['Blazer', 'Blouse', 'Body', 'Dress', 'Hat', 'Hoodie', 'Longsleeve'
 
 # Load the trained model
 model = ConvolutionalNetwork()
-model.load_state_dict(torch.load('cnn_model.pth', map_location=device))
+model_path = os.path.join(os.path.dirname(__file__), 'cnn_model.pth')
+model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()
 

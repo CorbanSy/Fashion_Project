@@ -12,7 +12,7 @@ import torch
 from torchvision import models, transforms
 from PIL import Image
 import traceback
-from .cnn_model import predict_category
+from .predict_model import predict_image
 
 
 logger = logging.getLogger(__name__)
@@ -115,9 +115,17 @@ class OutfitRecommendationView(generics.ListAPIView):
 class VirtualClosetView(generics.ListAPIView):
     serializer_class = VirtualClosetSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         return VirtualCloset.objects.filter(user=self.request.user)
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -127,7 +135,7 @@ class ImageUploadView(APIView):
         if file_serializer.is_valid():
             file_serializer.save()
             image_path = file_serializer.data['image']
-            category = predict_category(image_path)
+            category = predict_image(image_path)
             return Response({'category': category}, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
