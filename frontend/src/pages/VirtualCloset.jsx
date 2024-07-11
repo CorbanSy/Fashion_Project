@@ -67,8 +67,7 @@ function VirtualCloset() {
                 {categories.map(({ name, subcategories }) => (
                     <div key={name} className="category-section">
                         <div className="category-header" onClick={() => toggleCategory(name)}>
-                            <h3>{name}</h3>
-                            <span>{expandedCategories[name] ? '▲' : '▼'}</span>
+                            <h3>{name}<span>{expandedCategories[name] ? '▲' : '▼'}</span></h3>
                         </div>
                         <div className={`subcategory-list ${expandedCategories[name] ? 'show' : ''}`}>
                             {subcategories.map(subcategory => (
