@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 227px;
+    max-width: 300px; /* Adjusted to allow for more space */
     flex-wrap: wrap;
 }
 
@@ -75,9 +75,11 @@
 
 .subcategory-list {
     display: none;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Ensure items are in a single line */
     gap: 10px;
     width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    white-space: nowrap; /* Prevents wrapping */
 }
 
 .subcategory-list.show {
