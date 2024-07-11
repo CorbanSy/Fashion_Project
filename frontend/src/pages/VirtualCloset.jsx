@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import Modal from "../components/Modal";
 import "../styles/VirtualCloset.css";
 import backgroundImage from "../assets/virtual-closet-background.png.webp";
 import maleMannequin from "../assets/male-Mannequin.webp";
@@ -17,8 +16,8 @@ const categories = [
 
 function VirtualCloset() {
     const [closetItems, setClosetItems] = useState([]);
-    const [isCreateModalOpen, setCreateModalOpen] = useState(false);
-    const [isGenerateModalOpen, setGenerateModalOpen] = useState(false);
+    const [isCreateCanvasOpen, setCreateCanvasOpen] = useState(false);
+    const [isGenerateCanvasOpen, setGenerateCanvasOpen] = useState(false);
     const [selectedCategoryItems, setSelectedCategoryItems] = useState([]);
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [categoryModalTitle, setCategoryModalTitle] = useState("");
@@ -39,11 +38,19 @@ function VirtualCloset() {
     };
 
     const handleCreateOutfitClick = () => {
-        setCreateModalOpen(true);
+        setCreateCanvasOpen(true);
     };
 
     const handleGenerateOutfitClick = () => {
-        setGenerateModalOpen(true);
+        setGenerateCanvasOpen(true);
+    };
+
+    const closeCreateCanvas = () => {
+        setCreateCanvasOpen(false);
+    };
+
+    const closeGenerateCanvas = () => {
+        setGenerateCanvasOpen(false);
     };
 
     const handleSubcategoryClick = (subcategory) => {
@@ -89,31 +96,39 @@ function VirtualCloset() {
                 <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
             </div>
 
-            <Modal isOpen={isCreateModalOpen} onClose={() => setCreateModalOpen(false)}>
-                <h2>Create Outfit</h2>
-                {/* Outfit creation content goes here */}
-            </Modal>
-
-            <Modal isOpen={isGenerateModalOpen} onClose={() => setGenerateModalOpen(false)}>
-                <h2>Generate Outfit (AI)</h2>
-                {/* AI outfit generate content goes here */}
-            </Modal>
-
-            <Modal isOpen={isCategoryModalOpen} onClose={() => setCategoryModalOpen(false)}>
-                <h2>{categoryModalTitle}</h2>
-                <div className="category-items">
-                    {selectedCategoryItems.length > 0 ? (
-                        selectedCategoryItems.map(item => (
-                            <div key={item.id} className="closet-item">
-                                <img src={item.item_image} alt={item.item_name} />
-                                <h4>{item.item_name}</h4>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No items found in this category</p>
-                    )}
+            {isCreateCanvasOpen && (
+                <div className="canvas-container">
+                    <button className="close-button" onClick={closeCreateCanvas}>×</button>
+                    {/* White canvas content goes here */}
                 </div>
-            </Modal>
+            )}
+
+            {isGenerateCanvasOpen && (
+                <div className="canvas-container">
+                    <button className="close-button" onClick={closeGenerateCanvas}>×</button>
+                    {/* White canvas content goes here */}
+                </div>
+            )}
+
+            {isCategoryModalOpen && (
+                <div className="modal-overlay" onClick={() => setCategoryModalOpen(false)}>
+                    <div className="modal-container" onClick={e => e.stopPropagation()}>
+                        <h2>{categoryModalTitle}</h2>
+                        <div className="category-items">
+                            {selectedCategoryItems.length > 0 ? (
+                                selectedCategoryItems.map(item => (
+                                    <div key={item.id} className="closet-item">
+                                        <img src={item.item_image} alt={item.item_name} />
+                                        <h4>{item.item_name}</h4>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No items found in this category</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
