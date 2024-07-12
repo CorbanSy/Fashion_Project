@@ -2,24 +2,41 @@ import { useState } from "react";
 import { uploadOutfit, uploadClothingItem } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/Form.css";
+import "../styles/UploadOutfit.css";
 import LoadingIndicator from "../components/LoadingIndicator";
 
-function UploadOutfit(){
-    const [image, setOutfitImage] = useState(null);
+function UploadOutfit() {
+    const [outfitImage, setOutfitImage] = useState(null);
     const [clothingImage, setClothingImage] = useState(null);
+    const [outfitImagePreview, setOutfitImagePreview] = useState(null);
+    const [clothingImagePreview, setClothingImagePreview] = useState(null);
+    const [detectedCategory, setDetectedCategory] = useState(null);  // New state for detected category
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const handleOutfitImageChange = (e) => {
+        const file = e.target.files[0];
+        setOutfitImage(file);
+        setOutfitImagePreview(URL.createObjectURL(file));
+    };
+
+    const handleClothingImageChange = (e) => {
+        const file = e.target.files[0];
+        setClothingImage(file);
+        setClothingImagePreview(URL.createObjectURL(file));
+    };
 
     const handleOutfitSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
         const formData = new FormData();
-        formData.append("image", outfitImageimage);
+        formData.append("image", outfitImage);
 
-        try{
+        try {
             const res = await uploadOutfit(formData);
             navigate(`/outfits/${res.data.id}/recommendations`);
         } catch (error) {
+            console.error("Outfit upload error:", error);
             alert(error);
         } finally {
             setLoading(false);
@@ -30,12 +47,15 @@ function UploadOutfit(){
         setLoading(true);
         e.preventDefault();
         const formData = new FormData();
-        formData.append("image", clothingImage);
+        formData.append("item_image", clothingImage);
+        console.log("Submitting form data:", formData);
 
-        try{
-            await uploadClothingItem(formData);
-            alert('Clothin item uploaded successfully!');
-        } catch(error){
+        try {
+            const res = await uploadClothingItem(formData);
+            setDetectedCategory(res.data.category);  // Set the detected category from the response
+            alert(`Clothing item uploaded successfully! Detected category: ${res.data.category}`);
+        } catch (error) {
+            console.error("Clothing upload error:", error);
             alert(error);
         } finally {
             setLoading(false);
@@ -49,9 +69,12 @@ function UploadOutfit(){
                 <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => setOutfitImage(e.target.files[0])}
+                    onChange={handleOutfitImageChange}
                     required
                 />
+                {outfitImagePreview && (
+                    <img src={outfitImagePreview} alt="Outfit Preview" className="image-preview" />
+                )}
                 {loading && <LoadingIndicator />}
                 <button type="submit" className="form-button">Upload</button>
             </form>
@@ -60,15 +83,24 @@ function UploadOutfit(){
                 <h1>Upload Clothing Item</h1>
                 <input
                     type="file"
-                    accept="image/"
-                    onChange={(e) => setClothingImage(e.target.files[0])}
+                    accept="image/*"
+                    onChange={handleClothingImageChange}
                     required
                 />
+                {clothingImagePreview && (
+                    <img src={clothingImagePreview} alt="Clothing Preview" className="image-preview" />
+                )}
                 {loading && <LoadingIndicator />}
                 <button type="submit" className="form-button">Upload</button>
             </form>
+
+            {detectedCategory && (
+                <div className="detected-category">
+                    <h2>Detected Category: {detectedCategory}</h2>
+                </div>
+            )}
         </div>
     );
 }
 
-export default UploadOutfit
+export default UploadOutfit;

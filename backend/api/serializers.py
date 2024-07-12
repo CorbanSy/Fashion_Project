@@ -59,5 +59,5 @@ class OutfitRecommendationSerializer(serializers.ModelSerializer):
 class VirtualClosetSerializer(serializers.ModelSerializer):
     class Meta:
         model = VirtualCloset
-        fields = ["id", "user", "item_name", "item_image"]
+        fields = ["id", "user", "item_name", "item_image", "category"]
         extra_kwargs = {"user": {"read_only": True}}

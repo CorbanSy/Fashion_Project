@@ -1,3 +1,5 @@
+# urls.py
+
 from django.urls import path
 from .views import UserProfileView, CreateUserView, FashionItemListCreate, UserPreferenceDetail, OutfitListCreateView, OutfitRecommendationView, VirtualClosetView, ImageUploadView
 

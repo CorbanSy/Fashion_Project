@@ -1,9 +1,10 @@
+// src/App.jsx
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import './styles/App.css';
 
-function App({ isLoggedIn, onLogout}) {
+function App({ isLoggedIn, onLogout }) {
     return (
         <div className="app">
             <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout} />
