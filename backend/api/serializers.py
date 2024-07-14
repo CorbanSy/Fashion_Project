@@ -1,15 +1,32 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset, UserProfile
+import json
 import logging
 
 logger = logging.getLogger(__name__)
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    def validate_favorite_colors(self, value):
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except (TypeError, json.JSONDecodeError):
+                raise serializers.ValidationError("Invalid JSON format for favorite colors")
+        return value
+
+    def validate_favorite_styles(self, value):
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except (TypeError, json.JSONDecodeError):
+                raise serializers.ValidationError("Invalid JSON format for favorite styles")
+        return value
+
     class Meta:
         model = UserProfile
         fields = ['profile_picture', 'bio', 'favorite_colors', 'favorite_styles', 'body_measurements']
-        extra_kwargs = {'user':{'read_only': True}}
+        extra_kwargs = {'user': {'read_only': True}}
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)

@@ -28,6 +28,23 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         if created:
             logger.info(f"UserProfile created for user: {self.request.user}")
         return user_profile
+    
+    def update(self, request, *args, **kwargs):
+        logger.info(f"Incoming update request data: {request.data}")
+        try:
+            partial = kwargs.pop('partial', False)
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            logger.info(f"UserProfile updated successfully: {serializer.data}")
+            return Response(serializer.data)
+        except serializers.ValidationError as e:
+            logger.error(f"Validation error: {e.detail}")
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error updating profile: {str(e)}", exc_info=True)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()

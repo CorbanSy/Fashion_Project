@@ -85,23 +85,22 @@ function Profile() {
     const [showStylesDropdown, setShowStylesDropdown] = useState(false);
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await api.get('/profile/');
+        api.get('/profile/')
+            .then(response => {
                 const data = response.data;
+                console.log('Profile data fetched:', data); // Debugging line to inspect data
                 if (typeof data.body_measurements === 'string') {
                     data.body_measurements = JSON.parse(data.body_measurements);
                 }
-                setProfileData({
-                    ...data,
-                    favorite_colors: Array.isArray(data.favorite_colors) ? data.favorite_colors : [],
-                    favorite_styles: Array.isArray(data.favorite_styles) ? data.favorite_styles : [],
-                });
-            } catch (error) {
-                console.error('Error fetching profile:', error);
-            }
-        };
-        fetchProfile();
+                if (!Array.isArray(data.favorite_colors)) {
+                    data.favorite_colors = [];
+                }
+                if (!Array.isArray(data.favorite_styles)) {
+                    data.favorite_styles = [];
+                }
+                setProfileData(data);
+            })
+            .catch(error => console.error('Error fetching profile:', error));
     }, []);
 
     const handleChange = (e) => {
@@ -180,10 +179,16 @@ function Profile() {
         for (let key in profileData) {
             if (key === "favorite_styles" || key === "favorite_colors" || key === "body_measurements") {
                 formData.append(key, JSON.stringify(profileData[key]));
+            } else if (key === "profile_picture" && profileData[key]) {
+                formData.append(key, profileData[key]);
             } else {
                 formData.append(key, profileData[key]);
             }
         }
+    
+        console.log("Submitting profile data:", profileData); // Log the profile data for debugging
+        console.log("FormData:", formData); // Log the FormData for debugging
+    
         api.put('/profile/', formData)
             .then(response => console.log('Profile updated:', response.data))
             .catch(error => console.error('Error updating profile:', error));
