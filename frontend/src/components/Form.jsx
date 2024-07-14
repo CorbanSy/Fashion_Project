@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css";
 import LoadingIndicator from "./LoadingIndicator";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function Form({ route, method, onLogin }) {
     const [username, setUsername] = useState("");
@@ -11,6 +13,8 @@ function Form({ route, method, onLogin }) {
     const [password2, setPassword2] = useState("");  // Add password2 state
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [showPassword2, setShowPassword2] = useState(false); // State to toggle confirm password visibility
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Create Account";
@@ -19,6 +23,11 @@ function Form({ route, method, onLogin }) {
         setLoading(true);
         e.preventDefault();
         setError("");
+        if (method === "register" && password !== password2) {
+            setLoading(false);
+            setError("Passwords do not match");
+            return;
+        }
         try {
             if (method === "register") {
                 await registerUser({ username, password, password2 });  // Include password2
@@ -51,23 +60,38 @@ function Form({ route, method, onLogin }) {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Username"
                 />
-                <input
-                    className="form-input"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                />
-                {method === "register" && (
+                <div className="password-input-container">
                     <input
                         className="form-input"
-                        type="password"
-                        value={password2}
-                        onChange={(e) => setPassword2(e.target.value)}
-                        placeholder="Confirm Password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
                     />
+                    <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="password-toggle-icon"
+                    />
+                </div>
+                {method === "register" && (
+                    <div className="password-input-container">
+                        <input
+                            className="form-input"
+                            type={showPassword2 ? "text" : "password"}
+                            value={password2}
+                            onChange={(e) => setPassword2(e.target.value)}
+                            placeholder="Confirm Password"
+                        />
+                        <FontAwesomeIcon
+                            icon={showPassword2 ? faEyeSlash : faEye}
+                            onClick={() => setShowPassword2(!showPassword2)}
+                            className="password-toggle-icon"
+                        />
+                    </div>
                 )}
                 {loading && <LoadingIndicator />}
+                {error && <p className="error-message">{error}</p>}
                 <button className="form-button" type="submit">
                     {name}
                 </button>
