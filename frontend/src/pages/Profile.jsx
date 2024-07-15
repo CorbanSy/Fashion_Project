@@ -89,15 +89,31 @@ function Profile() {
             .then(response => {
                 const data = response.data;
                 console.log('Profile data fetched:', data); // Debugging line to inspect data
+    
+                // Ensure body_measurements is parsed if it's a string
                 if (typeof data.body_measurements === 'string') {
                     data.body_measurements = JSON.parse(data.body_measurements);
                 }
-                if (!Array.isArray(data.favorite_colors)) {
-                    data.favorite_colors = [];
+    
+                // Ensure favorite_colors and favorite_styles are arrays
+                if (typeof data.favorite_colors === 'string') {
+                    try {
+                        data.favorite_colors = JSON.parse(data.favorite_colors.replace(/'/g, '"'));
+                    } catch (e) {
+                        console.error('Error parsing favorite_colors:', e);
+                        data.favorite_colors = [];
+                    }
                 }
-                if (!Array.isArray(data.favorite_styles)) {
-                    data.favorite_styles = [];
+    
+                if (typeof data.favorite_styles === 'string') {
+                    try {
+                        data.favorite_styles = JSON.parse(data.favorite_styles.replace(/'/g, '"'));
+                    } catch (e) {
+                        console.error('Error parsing favorite_styles:', e);
+                        data.favorite_styles = [];
+                    }
                 }
+    
                 setProfileData(data);
             })
             .catch(error => console.error('Error fetching profile:', error));
@@ -176,23 +192,31 @@ function Profile() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData();
+        
         for (let key in profileData) {
             if (key === "favorite_styles" || key === "favorite_colors" || key === "body_measurements") {
-                formData.append(key, JSON.stringify(profileData[key]));
+                formData.append(key, JSON.stringify(profileData[key]));  // Ensure JSON fields are properly formatted
             } else if (key === "profile_picture" && profileData[key]) {
                 formData.append(key, profileData[key]);
-            } else {
+            } else if (key !== "profile_picture") {
                 formData.append(key, profileData[key]);
             }
         }
-    
+        
         console.log("Submitting profile data:", profileData); // Log the profile data for debugging
-        console.log("FormData:", formData); // Log the FormData for debugging
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
     
-        api.put('/profile/', formData)
-            .then(response => console.log('Profile updated:', response.data))
-            .catch(error => console.error('Error updating profile:', error));
+        api.put('/profile/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(response => console.log('Profile updated:', response.data))
+        .catch(error => console.error('Error updating profile:', error));
     };
+    
 
     const handleAddColors = () => {
         setShowColorsDropdown(!showColorsDropdown);
