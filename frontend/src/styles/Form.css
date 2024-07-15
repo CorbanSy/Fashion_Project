@@ -20,6 +20,24 @@
     background-color: rgba(255, 255, 255, 0.9); /* Slightly translucent input background */
 }
 
+.password-input-container {
+    width: 100%;
+    position: relative;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+}
+
+.password-toggle-icon:hover {
+    color: #333;
+}
+
 .form-button {
     width: 100%;
     padding: 10px;

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import '../styles/Profile.css';
 import measurementImage from '../assets/measurement_image.webp'; // Adjust the path to where your image is stored
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const stylesOptions = [
     '00s', '20s', '30s', '40s', '50s', '60s', '70s', '80s', '90s',
@@ -79,14 +81,39 @@ function Profile() {
 
     const [isInches, setIsInches] = useState(true);
     const [profilePicturePreview, setProfilePicturePreview] = useState(null);
+    const [showColorsDropdown, setShowColorsDropdown] = useState(false);
+    const [showStylesDropdown, setShowStylesDropdown] = useState(false);
 
     useEffect(() => {
         api.get('/profile/')
             .then(response => {
                 const data = response.data;
-                if (data.body_measurements) {
+                console.log('Profile data fetched:', data); // Debugging line to inspect data
+    
+                // Ensure body_measurements is parsed if it's a string
+                if (typeof data.body_measurements === 'string') {
                     data.body_measurements = JSON.parse(data.body_measurements);
                 }
+    
+                // Ensure favorite_colors and favorite_styles are arrays
+                if (typeof data.favorite_colors === 'string') {
+                    try {
+                        data.favorite_colors = JSON.parse(data.favorite_colors.replace(/'/g, '"'));
+                    } catch (e) {
+                        console.error('Error parsing favorite_colors:', e);
+                        data.favorite_colors = [];
+                    }
+                }
+    
+                if (typeof data.favorite_styles === 'string') {
+                    try {
+                        data.favorite_styles = JSON.parse(data.favorite_styles.replace(/'/g, '"'));
+                    } catch (e) {
+                        console.error('Error parsing favorite_styles:', e);
+                        data.favorite_styles = [];
+                    }
+                }
+    
                 setProfileData(data);
             })
             .catch(error => console.error('Error fetching profile:', error));
@@ -165,16 +192,72 @@ function Profile() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData();
+        
         for (let key in profileData) {
             if (key === "favorite_styles" || key === "favorite_colors" || key === "body_measurements") {
-                formData.append(key, JSON.stringify(profileData[key]));
-            } else {
+                formData.append(key, JSON.stringify(profileData[key]));  // Ensure JSON fields are properly formatted
+            } else if (key === "profile_picture" && profileData[key]) {
+                formData.append(key, profileData[key]);
+            } else if (key !== "profile_picture") {
                 formData.append(key, profileData[key]);
             }
         }
-        api.put('/profile/', formData)
-            .then(response => console.log('Profile updated:', response.data))
-            .catch(error => console.error('Error updating profile:', error));
+        
+        console.log("Submitting profile data:", profileData); // Log the profile data for debugging
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+    
+        api.put('/profile/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(response => console.log('Profile updated:', response.data))
+        .catch(error => console.error('Error updating profile:', error));
+    };
+    
+
+    const handleAddColors = () => {
+        setShowColorsDropdown(!showColorsDropdown);
+    };
+
+    const handleAddStyles = () => {
+        setShowStylesDropdown(!showStylesDropdown);
+    };
+
+    const handleSelectColors = (e) => {
+        const values = Array.from(e.target.selectedOptions, option => option.value);
+        const newColors = values.filter(value => !profileData.favorite_colors.includes(value));
+        setProfileData(prevState => ({
+            ...prevState,
+            favorite_colors: [...prevState.favorite_colors, ...newColors]
+        }));
+        setShowColorsDropdown(false);
+    };
+
+    const handleSelectStyles = (e) => {
+        const values = Array.from(e.target.selectedOptions, option => option.value);
+        const newStyles = values.filter(value => !profileData.favorite_styles.includes(value));
+        setProfileData(prevState => ({
+            ...prevState,
+            favorite_styles: [...prevState.favorite_styles, ...newStyles]
+        }));
+        setShowStylesDropdown(false);
+    };
+
+    const handleRemoveColor = (color) => {
+        setProfileData(prevState => ({
+            ...prevState,
+            favorite_colors: prevState.favorite_colors.filter(c => c !== color)
+        }));
+    };
+
+    const handleRemoveStyle = (style) => {
+        setProfileData(prevState => ({
+            ...prevState,
+            favorite_styles: prevState.favorite_styles.filter(s => s !== style)
+        }));
     };
 
     return (
@@ -192,21 +275,47 @@ function Profile() {
                 </div>
                 <div className="form-group">
                     <label>Favorite Colors</label>
-                    <select name="favorite_colors" value={profileData.favorite_colors} onChange={handleChange} multiple>
-                        {colorsOptions.map((color, index) => (
-                            <option key={index} value={color.name}>
-                                {color.name}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="favorite-colors">
+                        {profileData.favorite_colors.map((color, index) => {
+                            const colorObject = colorsOptions.find(c => c.name === color);
+                            const isLightColor = ['#FFFF00', '#FFD700', '#C0C0C0', '#E6E6FA', '#FFFFFF'].includes(colorObject?.color);
+                            return (
+                                <div key={index} className="color-badge" style={{ backgroundColor: colorObject?.color, color: isLightColor ? '#000' : '#fff' }}>
+                                    {color}
+                                    <FontAwesomeIcon icon={faTimes} onClick={() => handleRemoveColor(color)} className="remove-icon" />
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <button type="button" onClick={handleAddColors}>Add Colors</button>
+                    {showColorsDropdown && (
+                        <select multiple onChange={handleSelectColors}>
+                            {colorsOptions.map((color, index) => (
+                                <option key={index} value={color.name}>
+                                    {color.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
                 </div>
                 <div className="form-group">
                     <label>Favorite Styles</label>
-                    <select name="favorite_styles" value={profileData.favorite_styles} onChange={handleChange} multiple>
-                        {stylesOptions.map((style, index) => (
-                            <option key={index} value={style}>{style}</option>
+                    <div className="favorite-styles">
+                        {profileData.favorite_styles.map((style, index) => (
+                            <div key={index} className="style-badge">
+                                {style}
+                                <FontAwesomeIcon icon={faTimes} onClick={() => handleRemoveStyle(style)} className="remove-icon" />
+                            </div>
                         ))}
-                    </select>
+                    </div>
+                    <button type="button" onClick={handleAddStyles}>Add Styles</button>
+                    {showStylesDropdown && (
+                        <select multiple onChange={handleSelectStyles}>
+                            {stylesOptions.map((style, index) => (
+                                <option key={index} value={style}>{style}</option>
+                            ))}
+                        </select>
+                    )}
                 </div>
                 <div className="body-measurements-container">
                     <div className="measurements-box">

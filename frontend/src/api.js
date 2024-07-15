@@ -1,11 +1,19 @@
 import axios from "axios";
-import { ACCESS_TOKEN } from "./constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
 
 const apiUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : "http://localhost:8000/api";
 
 const api = axios.create({
     baseURL: apiUrl,
 });
+
+export const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    if (!refreshToken) throw new Error("No refresh token available");
+    const res = await api.post(`/token/refresh/`, { refresh: refreshToken });
+    localStorage.setItem(ACCESS_TOKEN, res.data.access);
+    return res.data.access;
+};
 
 api.interceptors.request.use(
     (config) => {
@@ -16,6 +24,25 @@ api.interceptors.request.use(
         return config;
     },
     (error) => {
+        return Promise.reject(error);
+    }
+);
+
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+        if (error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            try {
+                const newAccessToken = await refreshAccessToken();
+                api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+                return api(originalRequest);
+            } catch (err) {
+                console.error("Refresh token failed", err);
+                // Optional: Add logic to handle refresh token failure (e.g., logout user)
+            }
+        }
         return Promise.reject(error);
     }
 );
@@ -44,8 +71,11 @@ export const registerUser = (userData) => {
     return api.post(`/user/register/`, userData);
 };
 
-export const loginUser = (userData) => {
-    return api.post(`/token/`, userData);
+export const loginUser = async (userData) => {
+    const res = await api.post(`/token/`, userData);
+    localStorage.setItem(ACCESS_TOKEN, res.data.access);
+    localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+    return res.data;
 };
 
 export const fetchFashionItems = () => {

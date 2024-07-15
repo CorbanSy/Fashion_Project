@@ -67,6 +67,6 @@ def predict_image(image_path):
 
 if __name__ == "__main__":
     # Example usage
-    image_path = r'C:\Users\corba\Fashion_Project\backend\data\test_image.jpg'  # Update this path to your image
+    image_path = r'C:\Users\corba\Fashion_Project\backend\data\fedora.jpg'  # Update this path to your image
     prediction = predict_image(image_path)
     print(f'The model predicts the category: {prediction}')
