@@ -54,7 +54,7 @@ function VirtualCloset() {
     };
 
     const handleSubcategoryClick = (subcategory) => {
-        const items = closetItems.filter(item => item.category === subcategory.toLowerCase());
+        const items = closetItems.filter(item => item.category && item.category.toLowerCase() === subcategory.toLowerCase());
         setSelectedCategoryItems(items);
         setCategoryModalTitle(subcategory);
         setCategoryModalOpen(true);
