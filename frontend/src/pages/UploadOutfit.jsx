@@ -10,8 +10,10 @@ function UploadOutfit() {
     const [clothingImage, setClothingImage] = useState(null);
     const [outfitImagePreview, setOutfitImagePreview] = useState(null);
     const [clothingImagePreview, setClothingImagePreview] = useState(null);
-    const [detectedCategory, setDetectedCategory] = useState(null);  // New state for detected category
+    const [detectedCategory, setDetectedCategory] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [itemName, setItemName] = useState("");  // Add state for item name
+    const [description, setDescription] = useState("");  // Add state for description
     const navigate = useNavigate();
 
     const handleOutfitImageChange = (e) => {
@@ -48,11 +50,12 @@ function UploadOutfit() {
         e.preventDefault();
         const formData = new FormData();
         formData.append("item_image", clothingImage);
-        console.log("Submitting form data:", formData);
+        formData.append("item_name", itemName);  // Add item name to form data
+        formData.append("description", description);  // Add description to form data
 
         try {
             const res = await uploadClothingItem(formData);
-            setDetectedCategory(res.data.category);  // Set the detected category from the response
+            setDetectedCategory(res.data.category);
             alert(`Clothing item uploaded successfully! Detected category: ${res.data.category}`);
         } catch (error) {
             console.error("Clothing upload error:", error);
@@ -66,30 +69,29 @@ function UploadOutfit() {
         <div>
             <form onSubmit={handleOutfitSubmit} className="form-container">
                 <h1>Upload Outfit</h1>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleOutfitImageChange}
-                    required
-                />
-                {outfitImagePreview && (
-                    <img src={outfitImagePreview} alt="Outfit Preview" className="image-preview" />
-                )}
+                <input type="file" accept="image/*" onChange={handleOutfitImageChange} required />
+                {outfitImagePreview && <img src={outfitImagePreview} alt="Outfit Preview" className="image-preview" />}
                 {loading && <LoadingIndicator />}
                 <button type="submit" className="form-button">Upload</button>
             </form>
 
             <form onSubmit={handleClothingSubmit} className="form-container">
                 <h1>Upload Clothing Item</h1>
+                <input type="file" accept="image/*" onChange={handleClothingImageChange} required />
                 <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleClothingImageChange}
+                    type="text"
+                    value={itemName}
+                    onChange={(e) => setItemName(e.target.value)}
+                    placeholder="Item Name"
                     required
                 />
-                {clothingImagePreview && (
-                    <img src={clothingImagePreview} alt="Clothing Preview" className="image-preview" />
-                )}
+                <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Description"
+                    required
+                />
+                {clothingImagePreview && <img src={clothingImagePreview} alt="Clothing Preview" className="image-preview" />}
                 {loading && <LoadingIndicator />}
                 <button type="submit" className="form-button">Upload</button>
             </form>

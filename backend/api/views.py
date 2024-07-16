@@ -156,9 +156,17 @@ class VirtualClosetView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         logger.info(f"Request data: {self.request.data}")
         image = self.request.data.get('item_image')
+        item_name = self.request.data.get('item_name')
+        description = self.request.data.get('description')
         if not image:
             logger.error('No image provided in the request')
             raise serializers.ValidationError('No image provided')
+        if not item_name:
+            logger.error('No name provided in the request')
+            raise serializers.ValidationError('No name provided')
+        if not description:
+            logger.error('No description provided in the request')
+            raise serializers.ValidationError('No description provided')
         logger.info(f"Image provided: {image}")
         try:
             category = predict_image(image)  # Predict the category using the CNN model
@@ -167,7 +175,7 @@ class VirtualClosetView(generics.ListCreateAPIView):
             raise serializers.ValidationError('Error in prediction')
         logger.info(f'Detected category: {category}')
         try:
-            serializer.save(user=self.request.user, category=category)
+            serializer.save(user=self.request.user, category=category, item_name=item_name, description=description)
         except Exception as e:
             logger.error(f"Error saving serializer: {str(e)}")
             raise serializers.ValidationError('Error saving serializer')
