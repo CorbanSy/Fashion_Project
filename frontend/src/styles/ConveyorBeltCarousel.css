@@ -1,8 +1,8 @@
 .carousel-container {
-    margin: 30px auto; /* Adjusted margin */
+    margin: 30px auto;
     text-align: center;
-    width: 60%; /* Adjusted width */
-    max-width: 800px; /* Adjusted max-width */
+    width: 60%;
+    max-width: 800px;
     padding: 20px;
     background: linear-gradient(135deg, #8f07d8 0%, #0613c1 100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -23,16 +23,22 @@
 
 .image-placeholder {
     width: 100%;
-    height: 150px; /* Adjusted height */
+    height: 150px;
     border: 2px dashed #ccc;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #000000;
-    font-size: 1rem;  /* Adjusted font-size */
+    font-size: 1rem;
     background-color: #ffffff;
     transition: all 0.3s ease;
+}
+
+.image-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
 }
 
 .carousel-item.middle .image-placeholder {

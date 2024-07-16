@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../api';
 import '../styles/Chatbot.css';
 
 const Chatbot = () => {
@@ -6,11 +7,30 @@ const Chatbot = () => {
         { text: 'Hi! How can I help you today?', sender: 'bot' }
     ]);
     const [input, setInput] = useState('');
+    const [userName, setUserName] = useState('');
 
     useEffect(() => {
+        // Fetch user data
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('/profile/');
+                const data = response.data;
+                console.log(data); // Log the response data
+                setUserName(data.name || 'User'); // Use a fallback value if name is undefined
+                // Update the greeting message
+                setMessages([
+                    { text: `Hi ${data.name || 'User'}! How can I help you today?`, sender: 'bot' }
+                ]);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+
         const handleScroll = () => {
             const chatbot = document.querySelector('.chatbot-container');
-            chatbot.style.bottom = `${20 + window.scrollY}px`; // Adjust this value as needed
+            chatbot.style.bottom = `${20 + window.scrollY}px`;
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -24,7 +44,6 @@ const Chatbot = () => {
         setMessages(newMessages);
         setInput('');
 
-        // Get response from OpenAI
         const response = await getResponseFromOpenAI(input);
         setMessages([...newMessages, { text: response, sender: 'bot' }]);
     };
@@ -35,7 +54,7 @@ const Chatbot = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_OPENAI_API_KEY` // replace with your actual OpenAI API key
+                    'Authorization': `Bearer YOUR_OPENAI_API_KEY`
                 },
                 body: JSON.stringify({
                     model: 'text-davinci-003',
