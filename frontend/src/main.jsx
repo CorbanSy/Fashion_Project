@@ -13,6 +13,7 @@ import ViewOutfits from "./pages/ViewOutfits";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VirtualCloset from "./pages/VirtualCloset";
 import Profile from './pages/Profile';
+import FashionTips from "./pages/FashionTips";
 import "./styles/index.css";
 
 function Main() {
@@ -40,6 +41,7 @@ function Main() {
                     <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
                     <Route path="home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                     <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                    <Route path="fashion-tips" element={<ProtectedRoute><FashionTips /></ProtectedRoute>} />
                     <Route path="login" element={<Login onLogin={handleLogin} /> }/>
                     <Route path="register" element={<Register />} />
                     <Route path="rate-outfit" element={<ProtectedRoute><UploadOutfit /></ProtectedRoute>} />

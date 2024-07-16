@@ -24,6 +24,9 @@ function Navbar({ isLoggedIn, onLogout }) {
         <nav className="navbar">
             <div className="navbar-brand">StyleSavvy</div>
             <ul className="navbar-nav">
+                <li className="nav-item">
+                    <Link to="/home" className="nav-link">Home</Link>
+                </li>
                 <li
                     className="nav-item"
                     onMouseEnter={() => toggleDropdown(true)}
@@ -41,10 +44,10 @@ function Navbar({ isLoggedIn, onLogout }) {
                     </div>
                 </li>
                 <li className="nav-item">
-                    <Link to="/home" className="nav-link">Home</Link>
+                    <Link to="/rate-outfit" className="nav-link">Rate My Outfit</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/rate-outfit" className="nav-link">Rate My Outfit</Link>
+                    <Link to="/fashion-tips" className="nav-link">Fashion Tips</Link>
                 </li>
                 {isLoggedIn && (
                     <li
@@ -56,7 +59,7 @@ function Navbar({ isLoggedIn, onLogout }) {
                             Profile
                             {profileDropdownOpen && (
                                 <div className="dropdown-menu">
-                                    <Link to="/profile#profile-picutre" className="dropdown-item">Profile Picture</Link>
+                                    <Link to="/profile#profile-picture" className="dropdown-item">Profile Picture</Link>
                                     <Link to="/profile#bio" className="dropdown-item">Bio</Link>
                                     <Link to="/profile#favorite-colors" className="dropdown-item">Favorite Colors</Link>
                                     <Link to="/profile#favorite-styles" className="dropdown-item">Favorite Styles</Link>
