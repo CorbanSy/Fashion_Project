@@ -6,6 +6,8 @@ function Navbar({ isLoggedIn, onLogout }) {
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [fashionTipsDropdownOpen, setFashionTipsDropdownOpen] = useState(false);
+    const [rateMyOutfitDropdownOpen, setRateMyOutfitDropdownOpen] = useState(false);
 
     const handleLogout = () => {
         onLogout();
@@ -18,6 +20,14 @@ function Navbar({ isLoggedIn, onLogout }) {
 
     const toggleProfileDropdown = (isOpen) => {
         setProfileDropdownOpen(isOpen);
+    };
+
+    const toggleFashionTipsDropdown = (isOpen) => {
+        setFashionTipsDropdownOpen(isOpen);
+    };
+
+    const toggleRateMyOutfitDropdown = (isOpen) => {
+        setRateMyOutfitDropdownOpen(isOpen);
     };
 
     return (
@@ -43,11 +53,38 @@ function Navbar({ isLoggedIn, onLogout }) {
                         )}
                     </div>
                 </li>
-                <li className="nav-item">
-                    <Link to="/rate-outfit" className="nav-link">Rate My Outfit</Link>
+                <li
+                    className="nav-item"
+                    onMouseEnter={() => toggleRateMyOutfitDropdown(true)}
+                    onMouseLeave={() => toggleRateMyOutfitDropdown(false)}
+                >
+                    <div className="nav-link">
+                        Rate My Outfit
+                        {rateMyOutfitDropdownOpen && (
+                            <div className="dropdown-menu">
+                                <Link to="/rate-outfit#upload-outfit" className="dropdown-item">Upload Outfit</Link>
+                                <Link to="/rate-outfit#upload-clothing-item" className="dropdown-item">Upload Clothing Item</Link>
+                            </div>
+                        )}
+                    </div>
                 </li>
-                <li className="nav-item">
-                    <Link to="/fashion-tips" className="nav-link">Fashion Tips</Link>
+                <li
+                    className="nav-item"
+                    onMouseEnter={() => toggleFashionTipsDropdown(true)}
+                    onMouseLeave={() => toggleFashionTipsDropdown(false)}
+                >
+                    <div className="nav-link">
+                        Fashion Tips
+                        {fashionTipsDropdownOpen && (
+                            <div className="dropdown-menu">
+                                <Link to="/fashion-tips?category=Seasonal Tips" className="dropdown-item">Seasonal Tips</Link>
+                                <Link to="/fashion-tips?category=Occasion Wear" className="dropdown-item">Occasion Wear</Link>
+                                <Link to="/fashion-tips?category=Accessorizing" className="dropdown-item">Accessorizing</Link>
+                                <Link to="/fashion-tips?category=Wardrobe Essentials" className="dropdown-item">Wardrobe Essentials</Link>
+                                <Link to="/fashion-tips?category=Body Type Tips" className="dropdown-item">Body Type Tips</Link>
+                            </div>
+                        )}
+                    </div>
                 </li>
                 {isLoggedIn && (
                     <li
