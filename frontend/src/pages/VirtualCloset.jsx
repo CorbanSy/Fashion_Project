@@ -67,6 +67,10 @@ function VirtualCloset() {
         }));
     };
 
+    const closeModal = () => {
+        setCategoryModalOpen(false);
+    };
+
     return (
         <div className="virtual-closet-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
             <h2 className="virtual-closet-title">Your Virtual Closet</h2>
@@ -113,7 +117,10 @@ function VirtualCloset() {
             {isCategoryModalOpen && (
                 <div className="modal-overlay" onClick={() => setCategoryModalOpen(false)}>
                     <div className="modal-container" onClick={e => e.stopPropagation()}>
-                        <h2>{categoryModalTitle}</h2>
+                        <div className="modal-title-wrapper">
+                            <button className="modal-close-button" onClick={closeModal}>×</button>
+                            <h2 className="modal-title">{categoryModalTitle}</h2>
+                        </div>
                         <div className="category-items">
                             {selectedCategoryItems.length > 0 ? (
                                 selectedCategoryItems.map(item => (
@@ -123,7 +130,7 @@ function VirtualCloset() {
                                     </div>
                                 ))
                             ) : (
-                                <p>No items found in this category</p>
+                                <p className="no-items-message">No items found in this category</p>
                             )}
                         </div>
                     </div>
