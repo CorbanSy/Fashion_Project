@@ -5,6 +5,7 @@ import "../styles/VirtualCloset.css";
 import backgroundImage from "../assets/virtual-closet-background.png.webp";
 import maleMannequin from "../assets/male-Mannequin.webp";
 import femaleMannequin from "../assets/female-Mannequin.webp";
+import Draggable from 'react-draggable';
 
 const categories = [
     { name: "Hats", subcategories: ["Hat"] },
@@ -22,6 +23,8 @@ function VirtualCloset() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [categoryModalTitle, setCategoryModalTitle] = useState("");
     const [expandedCategories, setExpandedCategories] = useState({});
+    const [canvasItems, setCanvasItems] = useState([]);
+    const [draggedItem, setDraggedItem] = useState(null);
 
     useEffect(() => {
         getClosetItems();
@@ -47,6 +50,8 @@ function VirtualCloset() {
 
     const closeCreateCanvas = () => {
         setCreateCanvasOpen(false);
+        setCanvasItems([]);
+        setDraggedItem(null);
     };
 
     const closeGenerateCanvas = () => {
@@ -69,6 +74,30 @@ function VirtualCloset() {
 
     const closeModal = () => {
         setCategoryModalOpen(false);
+    };
+
+    const handleDragStop = (e, data, item) => {
+        if (!canvasItems.find(canvasItem => canvasItem.id === item.id)) {
+            setCanvasItems(prevItems => [
+                ...prevItems,
+                {
+                    ...item,
+                    x: data.x,
+                    y: data.y
+                }
+            ]);
+            setDraggedItem(item.id);
+        }
+    }
+
+    const handleConfirmOutfit = () => {
+        //handle outfit confirmation logic here
+        alert("Outfit confirmed!");
+    }
+
+    const handleResetCanvas = () => {
+        setCanvasItems([]);
+        setDraggedItem(null);
     };
 
     return (
@@ -103,14 +132,28 @@ function VirtualCloset() {
             {isCreateCanvasOpen && (
                 <div className="canvas-container">
                     <button className="close-button" onClick={closeCreateCanvas}>×</button>
-                    {/* White canvas content goes here */}
+                    <div className="canvas">
+                        {canvasItems.map((item, index) => (
+                            <Draggable
+                                key={index}
+                                defaultPosition={{ x: item.x, y: item.y }}
+                                onStop={(e, data) => handleDragStop(e, data, item)}
+                            >
+                                <div className="closet-item">
+                                    <img src={item.item_image} alt={item.item_name} />
+                                    <h4>{item.item_name}</h4>
+                                </div>
+                            </Draggable>
+                        ))}
+                    </div>
+                    <button className="confirm-button" onClick={handleConfirmOutfit}>Confirm Outfit</button>
+                    <button className="reset-button" onClick={handleResetCanvas}>Reset</button>
                 </div>
             )}
 
             {isGenerateCanvasOpen && (
                 <div className="canvas-container">
                     <button className="close-button" onClick={closeGenerateCanvas}>×</button>
-                    {/* White canvas content goes here */}
                 </div>
             )}
 
@@ -124,10 +167,15 @@ function VirtualCloset() {
                         <div className="category-items">
                             {selectedCategoryItems.length > 0 ? (
                                 selectedCategoryItems.map(item => (
-                                    <div key={item.id} className="closet-item">
-                                        <img src={item.item_image} alt={item.item_name} />
-                                        <h4>{item.item_name}</h4>
-                                    </div>
+                                    <Draggable
+                                        key={item.id}
+                                        onStop={(e, data) => handleDragStop(e, data, item)}
+                                    >
+                                        <div className={`closet-item ${draggedItem === item.id ? 'dulled' : ''}`}>
+                                            <img src={item.item_image} alt={item.item_name} />
+                                            <h4>{item.item_name}</h4>
+                                        </div>
+                                    </Draggable>
                                 ))
                             ) : (
                                 <p className="no-items-message">No items found in this category</p>
