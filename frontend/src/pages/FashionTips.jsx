@@ -1,5 +1,6 @@
 import React from "react";
 import '../styles/FashionTips.css';
+import FashionAdviceChatbot from '../components/FashionAdviceChatbot';
 
 const tips = [
     {
@@ -12,7 +13,7 @@ const tips = [
         content: "Use a secret formula to create stylish summer outfits effortlessly. Focus on key pieces and avoid common mistakes to keep your style fresh and confident.",
         link: "https://queenbeestyling.com",
     },
-    //add more tips as needed
+    // add more tips as needed
 ];
 
 const FashionTips = () => {
@@ -28,6 +29,7 @@ const FashionTips = () => {
                     </div>
                 ))}
             </div>
+            <FashionAdviceChatbot />
         </div>
     );
 };
