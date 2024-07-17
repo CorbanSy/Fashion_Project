@@ -54,7 +54,7 @@ function Navbar({ isLoggedIn, onLogout }) {
                         Virtual Closet
                         {dropdownOpen && (
                             <div className="dropdown-menu">
-                                <Link to="/virtual-closet?view=view-outfits" className="dropdown-item">View Outfits</Link>
+                                <Link to="/view-outfits" className="dropdown-item">View Outfits</Link> {/* Updated Link */}
                                 <Link to="/virtual-closet?view=create-outfit" className="dropdown-item">Create Outfit</Link>
                                 <Link to="/virtual-closet?view=generate-outfit" className="dropdown-item">Generate Outfit</Link>
                             </div>
@@ -90,7 +90,7 @@ function Navbar({ isLoggedIn, onLogout }) {
                                 <Link to="/fashion-tips?category=Accessorizing" className="dropdown-item">Accessorizing</Link>
                                 <Link to="/fashion-tips?category=Wardrobe Essentials" className="dropdown-item">Wardrobe Essentials</Link>
                                 <Link to="/fashion-tips?category=Body Type Tips" className="dropdown-item">Body Type Tips</Link>
-                                <Link to="/fashion-tips?category=Color Theory" className="dropdown-item">Color Theory</Link> {/* Added Color Theory */}
+                                <Link to="/fashion-tips?category=Color Theory" className="dropdown-item">Color Theory</Link>
                             </div>
                         )}
                     </div>

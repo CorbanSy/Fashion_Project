@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import "../styles/ViewOutfits.css"; // Make sure you have this CSS file
+import api from '../api'; // Use the centralized api module
+import "../styles/ViewOutfits.css"; // Ensure you have this CSS file
 
 function ViewOutfits() {
     const [outfits, setOutfits] = useState([]);
@@ -9,7 +9,7 @@ function ViewOutfits() {
     useEffect(() => {
         const fetchOutfits = async () => {
             try {
-                const response = await axios.get('/outfits/');
+                const response = await api.get('/virtual-closet/');
                 if (Array.isArray(response.data)) {
                     setOutfits(response.data);
                 } else {
@@ -29,8 +29,8 @@ function ViewOutfits() {
             <div className="outfits-grid">
                 {outfits.map((outfit, index) => (
                     <div key={outfit.id || index} className="outfit-box">
-                        <h2>{outfit.name || `Outfit ${index + 1}`}</h2>
-                        <img src={outfit.image} alt={outfit.name} />
+                        <h2>{outfit.item_name || `Outfit ${index + 1}`}</h2>
+                        <img src={outfit.item_image} alt={outfit.item_name || `Outfit ${index + 1}`} />
                         {/* Add more outfit details as needed */}
                     </div>
                 ))}
