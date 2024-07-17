@@ -137,7 +137,8 @@ const categories = [
     "Occasion Wear",
     "Accessorizing",
     "Wardrobe Essentials",
-    "Body Type Tips"
+    "Body Type Tips",
+    "Color Theory"
 ];
 
 const colors = [
@@ -169,10 +170,48 @@ const colors = [
     { name: 'White', color: '#FFFFFF' }
 ];
 
+const colorCombinations = [
+    ['Red', 'Yellow', 'Blue'],
+    ['Orange', 'Green', 'Purple'],
+    ['Crimson', 'Gold', 'Navy'],
+    ['Maroon', 'Lime', 'Sky Blue'],
+    ['Coral', 'Olive', 'Lavender'],
+    ['Salmon', 'Green', 'Magenta'],
+    ['Yellow', 'Blue', 'Purple'],
+    ['Gold', 'Navy', 'Pink'],
+    ['Green', 'Sky Blue', 'Tan'],
+    ['Lime', 'Purple', 'Gray'],
+    ['Olive', 'Lavender', 'Silver'],
+    ['Blue', 'Magenta', 'White'],
+    ['Navy', 'Pink', 'Silver'],
+    ['Sky Blue', 'Brown', 'Black'],
+    ['Purple', 'Gold', 'Tan'],
+    ['Lavender', 'Maroon', 'Gray'],
+    ['Magenta', 'Green', 'Blue'],
+    ['Pink', 'Olive', 'Navy'],
+    ['Hot Pink', 'Coral', 'Silver'],
+    ['Brown', 'Sky Blue', 'White'],
+    ['Chocolate', 'Lime', 'Magenta'],
+    ['Tan', 'Purple', 'Navy'],
+    ['Gray', 'Red', 'Gold'],
+    ['Silver', 'Yellow', 'Maroon'],
+    ['Black', 'Blue', 'Salmon'],
+    ['White', 'Coral', 'Green']
+];
+
+const isLightColor = (color) => {
+    const rgb = parseInt(color.slice(1), 16);
+    const r = (rgb >> 16) & 0xff;
+    const g = (rgb >>  8) & 0xff;
+    const b = (rgb >>  0) & 0xff;
+    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+    return brightness > 186;
+}
+
 const FashionTips = () => {
     const [searchParams] = useSearchParams();
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [selectedColors, setSelectedColors] = useState([]);
+    const [selectedColor, setSelectedColor] = useState(null);
 
     useEffect(() => {
         const category = searchParams.get("category");
@@ -188,26 +227,12 @@ const FashionTips = () => {
         : tips.filter(tip => tip.category === selectedCategory);
 
     const handleColorSelect = (color) => {
-        if (selectedColors.includes(color)) {
-            setSelectedColors(selectedColors.filter(c => c !== color));
-        } else {
-            setSelectedColors([...selectedColors, color]);
-        }
+        setSelectedColor(color);
     };
 
-    const getFilteredColors = () => {
-        if (selectedColors.length === 0) {
-            return colors;
-        }
-
-        // Mock filtering logic: just avoid selecting same color for simplicity.
-        return colors.map(c => ({
-            ...c,
-            dulled: selectedColors.includes(c.name)
-        }));
-    };
-
-    const filteredColors = getFilteredColors();
+    const filteredColorCombinations = selectedColor
+        ? colorCombinations.filter(combination => combination.includes(selectedColor))
+        : colorCombinations;
 
     return (
         <div className="fashion-tips-page">
@@ -222,32 +247,60 @@ const FashionTips = () => {
                 </ul>
             </div>
             <div className="fashion-tips-container">
-                <h1>{selectedCategory} Tips and Tricks</h1>
-                <div className="tips-list">
-                    {filteredTips.map((tip, index) => (
-                        <div key={index} className="tip-item">
-                            <h2>{tip.title}</h2>
-                            <p>{tip.content}</p>
-                            <a href={tip.link} target="_blank" rel="noopener noreferrer">Read more</a>
+                {selectedCategory === "Color Theory" ? (
+                    <div className="color-theory-container">
+                        <h2>Color Theory</h2>
+                        <div className="all-colors">
+                            {colors.map((color, index) => (
+                                <div
+                                    key={index}
+                                    className="color-box"
+                                    style={{ backgroundColor: color.color, color: isLightColor(color.color) ? 'black' : 'white' }}
+                                    onClick={() => handleColorSelect(color.name)}
+                                >
+                                    {color.name}
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                        {selectedColor && (
+                            <>
+                                <h2>Combinations with {selectedColor}</h2>
+                                <div className="combinations-list">
+                                    {filteredColorCombinations.map((combination, index) => (
+                                        <div key={index} className="combination-row">
+                                            {combination.map((color, i) => {
+                                                const colorObj = colors.find(c => c.name === color);
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        className="color-box"
+                                                        style={{ backgroundColor: colorObj.color, color: isLightColor(colorObj.color) ? 'black' : 'white' }}
+                                                    >
+                                                        {color}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ) : (
+                    <>
+                        <h1>{selectedCategory} Tips and Tricks</h1>
+                        <div className="tips-list">
+                            {filteredTips.map((tip, index) => (
+                                <div key={index} className="tip-item">
+                                    <h2>{tip.title}</h2>
+                                    <p>{tip.content}</p>
+                                    <a href={tip.link} target="_blank" rel="noopener noreferrer">Read more</a>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
                 <FashionAdviceChatbot />
-            </div>
-            <div className="color-theory-container">
-                <h2>Color Theory</h2>
-                <div className="color-boxes">
-                    {filteredColors.map((color, index) => (
-                        <div
-                            key={index}
-                            className={`color-box ${color.dulled ? 'dulled' : ''}`}
-                            style={{ backgroundColor: color.color }}
-                            onClick={() => handleColorSelect(color.name)}
-                        >
-                            {color.name}
-                        </div>
-                    ))}
-                </div>
             </div>
         </div>
     );

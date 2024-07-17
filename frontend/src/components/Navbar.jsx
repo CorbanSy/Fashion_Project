@@ -82,6 +82,7 @@ function Navbar({ isLoggedIn, onLogout }) {
                                 <Link to="/fashion-tips?category=Accessorizing" className="dropdown-item">Accessorizing</Link>
                                 <Link to="/fashion-tips?category=Wardrobe Essentials" className="dropdown-item">Wardrobe Essentials</Link>
                                 <Link to="/fashion-tips?category=Body Type Tips" className="dropdown-item">Body Type Tips</Link>
+                                <Link to="/fashion-tips?category=Color Theory" className="dropdown-item">Color Theory</Link> {/* Added Color Theory */}
                             </div>
                         )}
                     </div>

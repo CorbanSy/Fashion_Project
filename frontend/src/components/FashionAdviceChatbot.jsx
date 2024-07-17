@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState } from "react";
 import '../styles/FashionAdviceChatbot.css';
 
 const FashionAdviceChatbot = () => {
@@ -41,6 +41,9 @@ const FashionAdviceChatbot = () => {
 
     return (
         <div className="fashion-advice-chatbot-container">
+            <div className="chatbot-header">
+                <h2>Fashion Advice Chatbot</h2>
+            </div>
             <div className="chatbot-messages">
                 {messages.map((msg, index) => (
                     <div key={index} className={`chatbot-message ${msg.sender}`}>

@@ -88,15 +88,13 @@
 }
 
 .color-theory-container {
-    width: 200px;
+    width: 100%;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 2px solid #000000;
-    position: fixed;
-    right: 20px; /* Move the color theory box to the right */
-    top: 100px;
+    text-align: center;
 }
 
 .color-theory-container h2 {
@@ -104,16 +102,30 @@
     color: #000000;
 }
 
-.color-boxes {
+.all-colors {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.combinations-list {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
     margin-top: 20px;
 }
 
+.combination-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
 .color-box {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 5px;
     cursor: pointer;
     display: flex;
@@ -121,8 +133,5 @@
     justify-content: center;
     color: white;
     font-weight: bold;
-}
-
-.color-box.dulled {
-    opacity: 0.5;
+    border: 1px solid #000000;
 }

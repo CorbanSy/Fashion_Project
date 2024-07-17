@@ -74,6 +74,7 @@ const Chatbot = () => {
     return (
         <div className="chatbot-container">
             <div className="chatbot-header">
+                <h2>Navigational Chatbot</h2>
                 <p>Examples of what to ask:</p>
                 <ul>
                     <li>Where do I go to generate an outfit?</li>

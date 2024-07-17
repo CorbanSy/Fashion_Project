@@ -11,6 +11,14 @@
     overflow: hidden;
 }
 
+.chatbot-header {
+    padding: 15px;
+    background: #8209c3;
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid #800dd3;
+}
+
 .chatbot-messages {
     flex: 1;
     padding: 10px;
@@ -27,11 +35,12 @@
 .chatbot-message.bot {
     background: #9c0dcb;
     text-align: left;
+    color: white;
 }
 
 .chatbot-message.user {
     background: #0084ff;
-    color: rgb(133, 8, 196);
+    color: white;
     text-align: right;
 }
 
