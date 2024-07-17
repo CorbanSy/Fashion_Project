@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "../styles/Navbar.css";
+import searchIcon from 'C:/Users/corba/Fashion_Project/backend/media/search-icon.png'; // Import the image
 
 function Navbar({ isLoggedIn, onLogout }) {
     const navigate = useNavigate();
@@ -8,6 +9,7 @@ function Navbar({ isLoggedIn, onLogout }) {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const [fashionTipsDropdownOpen, setFashionTipsDropdownOpen] = useState(false);
     const [rateMyOutfitDropdownOpen, setRateMyOutfitDropdownOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleLogout = () => {
         onLogout();
@@ -28,6 +30,12 @@ function Navbar({ isLoggedIn, onLogout }) {
 
     const toggleRateMyOutfitDropdown = (isOpen) => {
         setRateMyOutfitDropdownOpen(isOpen);
+    };
+
+    const handleSearch = (event) => {
+        if (event.key === 'Enter') {
+            navigate(`/search?query=${searchQuery}`);
+        }
     };
 
     return (
@@ -115,6 +123,18 @@ function Navbar({ isLoggedIn, onLogout }) {
                     )}
                 </li>
             </ul>
+            <div className="search-bar">
+                <input 
+                    type="text" 
+                    placeholder="Search" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleSearch}
+                />
+                <button className="search-button">
+                    <img src={searchIcon} alt="search" />
+                </button>
+            </div>
         </nav>
     );
 }
