@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // Properly import React
 import { Link } from "react-router-dom";
 import api from "../api";
 import "../styles/VirtualCloset.css";
 import backgroundImage from "../assets/virtual-closet-background.png.webp";
-import maleMannequin from "../assets/male-Mannequin.webp";
-import femaleMannequin from "../assets/female-Mannequin.webp";
+import male_mann from "../assets/male-mann-body.jpg";
 import Draggable from 'react-draggable';
 
 const categories = [
@@ -15,6 +14,33 @@ const categories = [
     { name: "Not Sure/Other", subcategories: ["Not sure", "Other", "Skip"] },
 ];
 
+const zones = {
+    head: { x: 120, y: 50, width: 60, height: 60 },
+    torso: { x: 100, y: 110, width: 100, height: 120 },
+    legs: { x: 110, y: 230, width: 80, height: 120 },
+    feet: { x: 110, y: 350, width: 80, height: 40 },
+};
+
+const itemZoneMapping = {
+    Hat: 'head',
+    Blazer: 'torso',
+    Blouse: 'torso',
+    Body: 'torso',
+    Dress: 'torso',
+    Hoodie: 'torso',
+    Longsleeve: 'torso',
+    Outwear: 'torso',
+    Pants: 'legs',
+    Polo: 'torso',
+    Shirt: 'torso',
+    'T-Shirt': 'torso',
+    Top: 'torso',
+    Undershirt: 'torso',
+    Shorts: 'legs',
+    Skirt: 'legs',
+    Shoes: 'feet',
+};
+
 function VirtualCloset() {
     const [closetItems, setClosetItems] = useState([]);
     const [isCreateCanvasOpen, setCreateCanvasOpen] = useState(false);
@@ -24,11 +50,21 @@ function VirtualCloset() {
     const [categoryModalTitle, setCategoryModalTitle] = useState("");
     const [expandedCategories, setExpandedCategories] = useState({});
     const [canvasItems, setCanvasItems] = useState([]);
-    const [draggedItem, setDraggedItem] = useState(null);
+    const [itemRefs, setItemRefs] = useState({});
+
+    const mannequinRef = useRef(null);
 
     useEffect(() => {
         getClosetItems();
     }, []);
+
+    useEffect(() => {
+        const initialRefs = {};
+        closetItems.forEach(item => {
+            initialRefs[item.id] = React.createRef();
+        });
+        setItemRefs(initialRefs);
+    }, [closetItems]);
 
     const getClosetItems = () => {
         api
@@ -51,7 +87,6 @@ function VirtualCloset() {
     const closeCreateCanvas = () => {
         setCreateCanvasOpen(false);
         setCanvasItems([]);
-        setDraggedItem(null);
     };
 
     const closeGenerateCanvas = () => {
@@ -76,28 +111,55 @@ function VirtualCloset() {
         setCategoryModalOpen(false);
     };
 
+    const handleItemClick = (item) => {
+        setCanvasItems(prevItems => [
+            ...prevItems,
+            {
+                ...item,
+                x: 0,
+                y: 0,
+                ref: itemRefs[item.id]
+            }
+        ]);
+        setCategoryModalOpen(false);
+    };
+
     const handleDragStop = (e, data, item) => {
-        if (!canvasItems.find(canvasItem => canvasItem.id === item.id)) {
-            setCanvasItems(prevItems => [
-                ...prevItems,
-                {
-                    ...item,
-                    x: data.x,
-                    y: data.y
-                }
-            ]);
-            setDraggedItem(item.id);
+        const mannequin = mannequinRef.current.getBoundingClientRect();
+        const itemRect = item.ref.current.getBoundingClientRect();
+
+        const itemCategory = item.category;
+        const zoneName = itemZoneMapping[itemCategory];
+        const zone = zones[zoneName];
+
+        const zoneX = mannequin.left + zone.x;
+        const zoneY = mannequin.top + zone.y;
+        const zoneWidth = zone.width;
+        const zoneHeight = zone.height;
+
+        if (itemRect.left < zoneX + zoneWidth && itemRect.right > zoneX && itemRect.top < zoneY + zoneHeight && itemRect.bottom > zoneY) {
+            // Adjust position to fit the mannequin
+            const x = data.x - mannequin.left - (itemRect.width / 2);
+            const y = data.y - mannequin.top - (itemRect.height / 2);
+
+            setCanvasItems(prevItems => prevItems.map(ci => ci.id === item.id ? { ...ci, x, y, isOnMannequin: true } : ci));
+        } else {
+            setCanvasItems(prevItems => prevItems.map(ci => ci.id === item.id ? { ...ci, x: data.x, y: data.y, isOnMannequin: false } : ci));
         }
-    }
+    };
 
     const handleConfirmOutfit = () => {
         //handle outfit confirmation logic here
         alert("Outfit confirmed!");
-    }
+    };
 
     const handleResetCanvas = () => {
         setCanvasItems([]);
-        setDraggedItem(null);
+    };
+
+    const handleRemoveItem = (item) => {
+        console.log("Removing item: ", item); // Log the item to be removed
+        setCanvasItems(prevItems => prevItems.filter(ci => ci.id !== item.id));
     };
 
     return (
@@ -119,10 +181,6 @@ function VirtualCloset() {
                     </div>
                 ))}
             </div>
-            <div className="mannequin-container">
-                <img src={maleMannequin} alt="Male Mannequin" className="mannequin male-mannequin" />
-                <img src={femaleMannequin} alt="Female Mannequin" className="mannequin female-mannequin" />
-            </div>
             <div className="button-container">
                 <Link to="/view-outfits" className="view-outfits-button">View Outfits</Link>
                 <button onClick={handleCreateOutfitClick} className="create-outfit-button">Create Outfit</button>
@@ -133,21 +191,25 @@ function VirtualCloset() {
                 <div className="canvas-container">
                     <button className="close-button" onClick={closeCreateCanvas}>×</button>
                     <div className="canvas">
+                        <img src={male_mann} alt="Mannequin" className="mannequin-image" ref={mannequinRef} />
                         {canvasItems.map((item, index) => (
                             <Draggable
                                 key={index}
                                 defaultPosition={{ x: item.x, y: item.y }}
                                 onStop={(e, data) => handleDragStop(e, data, item)}
+                                nodeRef={item.ref}
                             >
-                                <div className="closet-item">
+                                <div className={`closet-item ${item.isOnMannequin ? 'on-mannequin' : ''}`} ref={item.ref} onDoubleClick={() => handleRemoveItem(item)}>
                                     <img src={item.item_image} alt={item.item_name} />
                                     <h4>{item.item_name}</h4>
                                 </div>
                             </Draggable>
                         ))}
                     </div>
-                    <button className="confirm-button" onClick={handleConfirmOutfit}>Confirm Outfit</button>
-                    <button className="reset-button" onClick={handleResetCanvas}>Reset</button>
+                    <div className="canvas-buttons">
+                        <button className="reset-button" onClick={handleResetCanvas}>Reset</button>
+                        <button className="confirm-button" onClick={handleConfirmOutfit}>Confirm Outfit</button>
+                    </div>
                 </div>
             )}
 
@@ -167,15 +229,10 @@ function VirtualCloset() {
                         <div className="category-items">
                             {selectedCategoryItems.length > 0 ? (
                                 selectedCategoryItems.map(item => (
-                                    <Draggable
-                                        key={item.id}
-                                        onStop={(e, data) => handleDragStop(e, data, item)}
-                                    >
-                                        <div className={`closet-item ${draggedItem === item.id ? 'dulled' : ''}`}>
-                                            <img src={item.item_image} alt={item.item_name} />
-                                            <h4>{item.item_name}</h4>
-                                        </div>
-                                    </Draggable>
+                                    <div key={item.id} className={`closet-item`} onClick={() => handleItemClick(item)}>
+                                        <img src={item.item_image} alt={item.item_name} />
+                                        <h4>{item.item_name}</h4>
+                                    </div>
                                 ))
                             ) : (
                                 <p className="no-items-message">No items found in this category</p>
