@@ -248,12 +248,18 @@
     align-items: center;
     overflow: hidden;
     z-index: 20;
+    overflow-y: auto; /* Add scrollable functionality */
 }
 
 .canvas {
     flex-grow: 1;
     width: 100%;
     position: relative;
+}
+
+/* Add top padding to ensure the head is always visible */
+.canvas .mannequin-image {
+    margin-top: 20px;
 }
 
 .confirm-button,

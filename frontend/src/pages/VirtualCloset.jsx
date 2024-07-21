@@ -199,7 +199,11 @@ function VirtualCloset() {
                                 onStop={(e, data) => handleDragStop(e, data, item)}
                                 nodeRef={item.ref}
                             >
-                                <div className={`closet-item ${item.isOnMannequin ? 'on-mannequin' : ''}`} ref={item.ref} onDoubleClick={() => handleRemoveItem(item)}>
+                                <div
+                                    className={`closet-item ${item.isOnMannequin ? 'on-mannequin' : ''}`}
+                                    ref={item.ref}
+                                    onDoubleClick={() => handleRemoveItem(item)}
+                                >
                                     <img src={item.item_image} alt={item.item_name} />
                                     <h4>{item.item_name}</h4>
                                 </div>
