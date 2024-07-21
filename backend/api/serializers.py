@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import FashionItem, UserPreference, Outfit, OutfitRecommendation, VirtualCloset, UserProfile
+from .models import FashionItem, UserProfile, Outfit, OutfitRecommendation, VirtualCloset, UserPreference
 import json
 import logging
 
@@ -52,7 +52,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         return super().to_internal_value(mutable_data)
 
-
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
 
@@ -88,7 +87,7 @@ class UserPreferencesSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPreference
         fields = ["id", "user", "preferred_styles", "preferred_colors"]
-        extra_kwargs = {"user": {"read_only":True}}
+        extra_kwargs = {"user": {"read_only": True}}
 
 class OutfitSerializer(serializers.ModelSerializer):
     class Meta:
@@ -104,5 +103,5 @@ class OutfitRecommendationSerializer(serializers.ModelSerializer):
 class VirtualClosetSerializer(serializers.ModelSerializer):
     class Meta:
         model = VirtualCloset
-        fields = ["id", "user", "item_name", "item_image", "category"]
+        fields = ["id", "user", "item_name", "item_image", "category", "description"]
         extra_kwargs = {"user": {"read_only": True}}

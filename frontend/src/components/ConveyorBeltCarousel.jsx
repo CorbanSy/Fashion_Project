@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import 'react-multi-carousel/lib/styles.css';
 import api from '../api';
-import '../styles/ConveyorBeltCarousel.css'
+import '../styles/ConveyorBeltCarousel.css';
+
 const ConveyorBeltCarousel = () => {
     const [items, setItems] = useState([]);
 
@@ -46,6 +47,9 @@ const ConveyorBeltCarousel = () => {
         { item_name: "Upload Clothing or Upload Outfit", item_image: "" },
     ];
 
+    // Merge items with placeholders
+    const displayItems = [...items, ...placeholders];
+
     return (
         <div className="carousel-container">
             <Carousel
@@ -59,11 +63,17 @@ const ConveyorBeltCarousel = () => {
                 transitionDuration={1000}
                 centerMode={true}
                 additionalTransfrom={-50}
+                keyBoardControl={true}
+                removeArrowOnDeviceType={["tablet", "mobile"]}
             >
-                {(items.length > 0 ? items : placeholders).map((item, index) => (
+                {displayItems.map((item, index) => (
                     <div key={index} className="carousel-item">
                         <div className={`image-placeholder ${index === 2 ? "middle" : index === 1 || index === 3 ? "side" : "outer"}`}>
-                            <span>{item.item_name}</span>
+                            {item.item_image ? (
+                                <img src={item.item_image} alt={item.item_name} />
+                            ) : (
+                                <span>{item.item_name}</span>
+                            )}
                         </div>
                     </div>
                 ))}

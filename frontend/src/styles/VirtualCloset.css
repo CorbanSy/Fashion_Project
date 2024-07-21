@@ -1,7 +1,8 @@
+/* Container Styling */
 .virtual-closet-container {
     padding: 20px;
     width: 100vw;
-    margin: 80px auto 0 auto; /* Adjusted margin to account for the fixed navbar */
+    margin: 80px auto 0 auto;
     text-align: left;
     background-size: cover;
     background-repeat: no-repeat;
@@ -12,40 +13,47 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+    align-items: flex-start;
+    box-sizing: border-box;
+    z-index: 1;
 }
 
+/* Title Styling */
 .virtual-closet-title {
     font-size: 2em;
     margin-bottom: 20px;
     background: rgba(0, 0, 0, 0.5);
     padding: 10px;
     border-radius: 5px;
-    position: relative; /* Ensures the title stays within the flow of the document */
-    z-index: 1; /* Ensures the title is above other elements */
-    width: 100%; /* Takes full width */
+    position: relative;
+    left: 35%;
+    z-index: 1;
+    width: 100%;
     max-width: 450px;
-    text-align: center; /* Centers the text */
+    text-align: center;
 }
 
+/* Button List Styling */
 .button-list {
-    margin-top: 0px; /* Adjusted to move buttons up */
-    width: 100%;
+    margin-top: 0;
+    width: 20%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-    padding-top: 0px; /* Reduced space for the sticky title */
-    box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+    padding-top: 0;
+    box-sizing: border-box;
+    z-index: 1;
 }
 
+/* Category Section Styling */
 .category-section {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 300px; /* Adjusted to allow for more space */
+    max-width: 300px;
     flex-wrap: wrap;
+    z-index: 1;
 }
 
 .category-header {
@@ -69,17 +77,17 @@
 }
 
 .category-header span {
-    margin-left: 10px; /* Adjust this value to control the spacing between text and arrow */
-    font-size: 1.5em; /* Adjust size if needed */
+    margin-left: 10px;
+    font-size: 1.5em;
 }
 
 .subcategory-list {
     display: none;
-    flex-wrap: nowrap; /* Ensure items are in a single line */
+    flex-wrap: nowrap;
     gap: 10px;
     width: 100%;
-    overflow-x: auto; /* Allow horizontal scrolling if needed */
-    white-space: nowrap; /* Prevents wrapping */
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .subcategory-list.show {
@@ -97,8 +105,8 @@
     transition: background 0.3s ease;
     text-align: center;
     display: flex;
-    justify-content: center; /* Centers the text horizontally */
-    align-items: center; /* Centers the text vertically */
+    justify-content: center;
+    align-items: center;
 }
 
 .closet-button:hover {
@@ -115,18 +123,50 @@
 .category-items {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
+    z-index: 1;
 }
 
+/* Modal Styling */
+.modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 1.5em;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.no-items-message {
+    color: rgb(254, 254, 254);
+    font-size: 1.2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Closet Item Styling */
 .closet-item {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
-    width: 200px;
+    width: 100px; /* Adjusted to fit better */
     transition: transform 0.2s;
+    cursor: grab;
 }
 
 .closet-item:hover {
@@ -139,43 +179,34 @@
 }
 
 .closet-item h4 {
-    font-size: 1.2em;
-    margin: 10px 0;
-    padding: 0 10px;
-    color: #333;
+    font-size: 1em;
+    margin: 5px 0;
+    padding: 0 5px;
+    color: #000000;
+    text-align: center;
 }
 
-.mannequin-container {
+.closet-item.on-mannequin {
     position: absolute;
-    top: 100px; /* Adjusted to ensure mannequins are not blocking other elements */
-    right: 20px;
-    display: flex;
-    justify-content: space-between;
-    width: 150px;
     pointer-events: none;
 }
 
-.mannequin {
-    width: 75px;
+/* Mannequin Styling */
+.mannequin-image {
+    width: 20%; /* Adjusted size to fit the canvas */
     height: auto;
+    margin: auto;
 }
 
-.male-mannequin {
-    margin-right: 10px;
-}
-
-.female-mannequin {
-    margin-left: 10px;
-}
-
+/* Button Container Styling */
 .button-container {
-    position: fixed; /* Changed to fixed to ensure visibility */
+    position: fixed;
     bottom: 20px;
     right: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    z-index: 2; /* Ensures the buttons are above other elements */
+    z-index: 2;
 }
 
 .view-outfits-button,
@@ -189,8 +220,8 @@
     border-radius: 5px;
     transition: background-color 0.3s;
     display: flex;
-    justify-content: center; /* Centers the text horizontally */
-    align-items: center; /* Centers the text vertically */
+    justify-content: center;
+    align-items: center;
 }
 
 .view-outfits-button:hover,
@@ -199,22 +230,65 @@
     background-color: #a50ed3;
 }
 
+/* Canvas Container Styling */
 .canvas-container {
-    position: absolute;
-    top: 10%; /* Adjusted to be higher on the page */
+    position: fixed;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 60%; /* Adjusted to be taller */
-    height: 80%; /* Adjusted to be taller */
+    width: 60%;
+    height: 80%;
     background-color: rgb(255, 255, 255);
     border: 2px solid #000000;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    z-index: 10; /* Ensure it appears above other elements */
+    z-index: 20;
+    overflow-y: auto; /* Add scrollable functionality */
+}
+
+.canvas {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+}
+
+/* Add top padding to ensure the head is always visible */
+.canvas .mannequin-image {
+    margin-top: 20px;
+}
+
+.confirm-button,
+.reset-button {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.confirm-button {
+    background-color: green;
+    color: white;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.reset-button {
+    background-color: red;
+    color: white;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.canvas-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .close-button {
@@ -225,9 +299,51 @@
     border: none;
     font-size: 1.5em;
     cursor: pointer;
-    color: red; /* Set the close button color to red */
+    color: red;
+    z-index: 30;
 }
 
+/* Modal Container Styling */
+.modal-container {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 15%;
+    height: calc(100% - 300px);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    padding: 20px;
+    z-index: 100;
+}
+
+.modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 1.5em;
+    color: #000000;
+}
+
+.modal-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: red;
+    z-index: 1000;
+}
+
+/* Miscellaneous */
 .hidden {
     display: none;
+}
+
+.dulled {
+    opacity: 0.5;
 }

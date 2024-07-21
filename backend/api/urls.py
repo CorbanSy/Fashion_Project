@@ -1,7 +1,14 @@
-# urls.py
-
 from django.urls import path
-from .views import UserProfileView, CreateUserView, FashionItemListCreate, UserPreferenceDetail, OutfitListCreateView, OutfitRecommendationView, VirtualClosetView, ImageUploadView
+from .views import (
+    UserProfileView,
+    CreateUserView,
+    FashionItemListCreate,
+    UserPreferenceDetail,
+    OutfitListCreateView,
+    OutfitRecommendationView,
+    VirtualClosetView,
+    ImageUploadView
+)
 
 urlpatterns = [
     path('users/', CreateUserView.as_view(), name='create-user'),
