@@ -116,13 +116,32 @@ class OutfitListCreateView(generics.ListCreateAPIView):
 
     def detect_clothing_items(self, predictions, image):
         detected_items = []
+        image_width, image_height = image.size
+        min_size = 30  # Minimum size of the cropped image
+
         for element in predictions[0]['boxes']:
             x1, y1, x2, y2 = map(int, element.tolist())
-            item_image = image.crop((x1, y1, x2, y2))
-            item_name = "clothing_item"  # you might want to use a better naming strategy
-            item_image_path = f"media/closet_items/{item_name}_{x1}_{y1}.jpg"
-            item_image.save(item_image_path)
-            detected_items.append((item_name, item_image_path))
+            print(f"Bounding box coordinates: ({x1}, {y1}), ({x2}, {y2})")
+
+            # Ensure coordinates are within image dimensions
+            if x1 < 0: x1 = 0
+            if y1 < 0: y1 = 0
+            if x2 > image_width: x2 = image_width
+            if y2 > image_height: y2 = image_height
+
+            width = x2 - x1
+            height = y2 - y1
+
+            # Check if the size of the cropped image is above the minimum threshold
+            if width > min_size and height > min_size:
+                item_image = image.crop((x1, y1, x2, y2))
+                item_name = "clothing_item"  # You might want to use a better naming strategy
+                item_image_path = f"media/closet_items/{item_name}_{x1}_{y1}.jpg"
+                item_image.save(item_image_path)
+                detected_items.append((item_name, item_image_path))
+            else:
+                print(f"Skipped small bounding box: ({x1}, {y1}), ({x2}, {y2}) with size ({width}, {height})")
+
         return detected_items
 
 class OutfitRecommendationView(generics.ListAPIView):

@@ -1,5 +1,21 @@
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    flex: 1;
+}
+
 .image-preview {
     max-width: 200px;
     max-height: 200px;
     margin-top: 10px;
+}
+
+.upload-forms-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }

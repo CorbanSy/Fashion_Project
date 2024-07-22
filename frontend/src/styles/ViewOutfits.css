@@ -17,14 +17,15 @@
     margin-bottom: 20px;
 }
 
-.outfits-grid {
-    display: flex;
-    flex-wrap: wrap;
+.outfits-grid, .clothing-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: 20px;
     justify-content: center;
+    margin-bottom: 40px;
 }
 
-.outfit-box {
+.outfit-box, .clothing-box {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,17 +36,25 @@
     transition: transform 0.2s;
 }
 
-.outfit-box img {
+.outfit-box img, .clothing-box img {
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
 
-.outfit-box:hover {
+.outfit-box:hover, .clothing-box:hover {
     transform: scale(1.05);
 }
 
-.outfit-box h2 {
+.outfit-box h2, .clothing-box h2 {
     font-size: 1.5em;
     margin-bottom: 10px;
+}
+
+.placeholder {
+    background-color: rgba(200, 200, 200, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
 }
