@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 from rest_framework import generics, status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -95,8 +96,9 @@ class OutfitListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         outfit = serializer.save(user=self.request.user)
-        self.process_outfit_image(outfit)
-    
+        detected_items = self.process_outfit_image(outfit)
+        return JsonResponse({"detected_items": detected_items}, status=201)
+
     def process_outfit_image(self, outfit):
         image_path = outfit.image.path
         image = Image.open(image_path)
@@ -107,12 +109,7 @@ class OutfitListCreateView(generics.ListCreateAPIView):
         with torch.no_grad():
             predictions = model(image_tensor)
         detected_items = self.detect_clothing_items(predictions, image)
-        for item_name, item_image in detected_items:
-            VirtualCloset.objects.create(
-                user=outfit.user,
-                item_name=item_name,
-                item_image=item_image
-            )
+        return detected_items
 
     def detect_clothing_items(self, predictions, image):
         detected_items = []
@@ -138,7 +135,10 @@ class OutfitListCreateView(generics.ListCreateAPIView):
                 item_name = "clothing_item"  # You might want to use a better naming strategy
                 item_image_path = f"media/closet_items/{item_name}_{x1}_{y1}.jpg"
                 item_image.save(item_image_path)
-                detected_items.append((item_name, item_image_path))
+                detected_items.append({
+                    "item_name": item_name,
+                    "item_image": item_image_path
+                })
             else:
                 print(f"Skipped small bounding box: ({x1}, {y1}), ({x2}, {y2}) with size ({width}, {height})")
 
@@ -215,3 +215,43 @@ class ImageUploadView(APIView):
         else:
             logger.error(f"Validation errors: {file_serializer.errors}")
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConfirmDetectedItemsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        detected_items = request.data.get('detected_items', [])
+        user = request.user
+
+        for item in detected_items:
+            item_name = item.get('item_name')
+            item_image = item.get('item_image')
+            if item_name and item_image:
+                VirtualCloset.objects.create(
+                    user=user,
+                    item_name=item_name,
+                    item_image=item_image
+                )
+        return Response({"detail": "Items confirmed and saved successfully."}, status=status.HTTP_201_CREATED)
+    
+class PredictItemDetails(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            image = request.data.get('image')
+            if not image:
+                return Response({"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Predict the item name here
+            item_name = self.predict_item_name(image)
+            
+            return Response({"item_name": item_name}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error predicting item name: {str(e)}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def predict_item_name(self, image):
+        # Implement your prediction logic here
+        item_name = "Predicted Item Name"  # Replace with your prediction logic
+        return item_name

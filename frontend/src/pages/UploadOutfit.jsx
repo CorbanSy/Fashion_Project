@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { uploadOutfit, uploadClothingItem } from "../api";
+import { uploadOutfit, uploadClothingItem, confirmDetectedItems, predictItemDetails } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/Form.css";
 import "../styles/UploadOutfit.css";
@@ -13,10 +13,11 @@ function UploadOutfit() {
     const [clothingImagePreview, setClothingImagePreview] = useState(null);
     const [ratingOutfitImagePreview, setRatingOutfitImagePreview] = useState(null);
     const [detectedCategory, setDetectedCategory] = useState(null);
+    const [detectedItems, setDetectedItems] = useState([]);
+    const [confirmingItems, setConfirmingItems] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [itemName, setItemName] = useState("");  // Add state for item name
-    const [description, setDescription] = useState("");  // Add state for description
+    const [itemName, setItemName] = useState("");
     const navigate = useNavigate();
 
     const handleOutfitImageChange = (e) => {
@@ -25,10 +26,24 @@ function UploadOutfit() {
         setOutfitImagePreview(URL.createObjectURL(file));
     };
 
-    const handleClothingImageChange = (e) => {
+    const handleClothingImageChange = async (e) => {
         const file = e.target.files[0];
         setClothingImage(file);
         setClothingImagePreview(URL.createObjectURL(file));
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            setLoading(true);
+            const res = await predictItemDetails(formData);
+            setItemName(res.data.item_name);
+        } catch (error) {
+            console.error("Prediction error:", error);
+            alert("Error predicting item name.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleRatingOutfitImageChange = (e) => {
@@ -45,9 +60,24 @@ function UploadOutfit() {
 
         try {
             const res = await uploadOutfit(formData);
-            alert("Outfit uploaded successfully!");
+            setDetectedItems(res.data.detected_items);
+            setConfirmingItems(true);
         } catch (error) {
             console.error("Outfit upload error:", error);
+            alert(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleConfirmItems = async () => {
+        setLoading(true);
+        try {
+            await confirmDetectedItems({ detected_items: detectedItems });
+            alert("Items confirmed and saved successfully!");
+            setConfirmingItems(false);
+        } catch (error) {
+            console.error("Error confirming items:", error);
             alert(error);
         } finally {
             setLoading(false);
@@ -59,8 +89,7 @@ function UploadOutfit() {
         e.preventDefault();
         const formData = new FormData();
         formData.append("item_image", clothingImage);
-        formData.append("item_name", itemName);  // Add item name to form data
-        formData.append("description", description);  // Add description to form data
+        formData.append("item_name", itemName);
 
         try {
             const res = await uploadClothingItem(formData);
@@ -102,6 +131,21 @@ function UploadOutfit() {
                 <button type="submit" className="form-button">Upload</button>
             </form>
 
+            {confirmingItems && (
+                <div className="confirmation-container">
+                    <h1>Confirm Detected Items</h1>
+                    <ul>
+                        {detectedItems.map((item, index) => (
+                            <li key={index}>
+                                <p>{item.item_name}</p>
+                                <img src={item.item_image} alt={item.item_name} />
+                            </li>
+                        ))}
+                    </ul>
+                    <button onClick={handleConfirmItems} className="form-button">Confirm Items</button>
+                </div>
+            )}
+
             <form onSubmit={handleClothingSubmit} className="form-container">
                 <h1>Upload Clothing Item</h1>
                 <input type="file" accept="image/*" onChange={handleClothingImageChange} required />
@@ -110,12 +154,6 @@ function UploadOutfit() {
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
                     placeholder="Item Name"
-                    required
-                />
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Description"
                     required
                 />
                 {clothingImagePreview && <img src={clothingImagePreview} alt="Clothing Preview" className="image-preview" />}

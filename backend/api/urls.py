@@ -7,7 +7,9 @@ from .views import (
     OutfitListCreateView,
     OutfitRecommendationView,
     VirtualClosetView,
-    ImageUploadView
+    ImageUploadView,
+    ConfirmDetectedItemsView,
+    PredictItemDetails,
 )
 
 urlpatterns = [
@@ -16,6 +18,8 @@ urlpatterns = [
     path("user/preferences/", UserPreferenceDetail.as_view(), name="user-preferences"),
     path("outfits/<int:outfit_id>/recommendations/", OutfitRecommendationView.as_view(), name="outfit-recommendations"),
     path("outfits/", OutfitListCreateView.as_view(), name="outfits-list-create"),
+    path("confirm-detected-items/", ConfirmDetectedItemsView.as_view(), name="confirm_detected_items"),
+    path('predict-item-details/', PredictItemDetails.as_view(), name='predict-item-details'),
     path("virtual-closet/", VirtualClosetView.as_view(), name="virtual-closet"),
     path('upload-image/', ImageUploadView.as_view(), name="upload-image"),
     path('profile/', UserProfileView.as_view(), name='user-profile'),

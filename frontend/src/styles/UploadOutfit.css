@@ -4,7 +4,10 @@
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: 10px;
-    flex: 1;
+    flex: 1 1 300px; /* Adjusts to ensure the flex items have a base width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .image-preview {
@@ -18,4 +21,31 @@
     justify-content: space-around;
     align-items: flex-start;
     flex-wrap: wrap;
+    width: 100%;
+}
+
+.confirmation-container {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    flex: 1 1 100%;
+}
+
+.confirmation-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.confirmation-container li {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.confirmation-container img {
+    max-width: 200px;
+    max-height: 200px;
 }

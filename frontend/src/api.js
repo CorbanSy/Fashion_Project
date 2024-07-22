@@ -67,6 +67,14 @@ export const uploadClothingItem = (formData) => {
     });
 };
 
+export const confirmDetectedItems = (data) => {
+    return api.post("/confirm-detected-items", data, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+};
+
 export const registerUser = (userData) => {
     return api.post(`/user/register/`, userData);
 };
@@ -84,6 +92,14 @@ export const fetchFashionItems = () => {
 
 export const fetchVirtualCloset = () => {
     return api.get(`/virtual-closet/`);
+};
+
+export const predictItemDetails = (formData) => {
+    return api.post("/predict-item-details", formData, {
+        headers: {
+            "Content-Type": "multiplart/form-data",
+        },
+    });
 };
 
 export default api;
