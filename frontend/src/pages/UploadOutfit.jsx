@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Form.css";
 import "../styles/UploadOutfit.css";
 import LoadingIndicator from "../components/LoadingIndicator";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 function UploadOutfit() {
     const [outfitImage, setOutfitImage] = useState(null);
@@ -15,9 +16,9 @@ function UploadOutfit() {
     const [detectedCategory, setDetectedCategory] = useState(null);
     const [detectedItems, setDetectedItems] = useState([]);
     const [confirmingItems, setConfirmingItems] = useState(false);
+    const [confirmingClothing, setConfirmingClothing] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [itemName, setItemName] = useState("");
     const navigate = useNavigate();
 
     const handleOutfitImageChange = (e) => {
@@ -37,10 +38,10 @@ function UploadOutfit() {
         try {
             setLoading(true);
             const res = await predictItemDetails(formData);
-            setItemName(res.data.item_name);
+            setDetectedCategory(res.data.category);
         } catch (error) {
             console.error("Prediction error:", error);
-            alert("Error predicting item name.");
+            alert("Error predicting item category.");
         } finally {
             setLoading(false);
         }
@@ -60,7 +61,7 @@ function UploadOutfit() {
 
         try {
             const res = await uploadOutfit(formData);
-            setDetectedItems(res.data.detected_items);
+            setDetectedItems(res.data.detected_items || []);
             setConfirmingItems(true);
         } catch (error) {
             console.error("Outfit upload error:", error);
@@ -84,17 +85,16 @@ function UploadOutfit() {
         }
     };
 
-    const handleClothingSubmit = async (e) => {
+    const handleClothingSubmit = async () => {
         setLoading(true);
-        e.preventDefault();
         const formData = new FormData();
         formData.append("item_image", clothingImage);
-        formData.append("item_name", itemName);
+        formData.append("item_name", detectedCategory);
 
         try {
             const res = await uploadClothingItem(formData);
-            setDetectedCategory(res.data.category);
-            alert(`Clothing item uploaded successfully! Detected category: ${res.data.category}`);
+            alert(`Clothing item uploaded successfully! Detected category: ${detectedCategory}`);
+            setConfirmingClothing(false); // Hide confirmation modal
         } catch (error) {
             console.error("Clothing upload error:", error);
             alert(error);
@@ -111,13 +111,21 @@ function UploadOutfit() {
 
         try {
             const res = await uploadOutfit(formData);
-            setRecommendations(res.data.recommendations);
+            setRecommendations(res.data.recommendations || []);
             alert("Outfit uploaded successfully for rating!");
         } catch (error) {
             console.error("Outfit rating upload error:", error);
             alert(error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleShowConfirmation = () => {
+        if (detectedCategory) {
+            setConfirmingClothing(true);
+        } else {
+            alert("Please select a clothing image first.");
         }
     };
 
@@ -146,26 +154,19 @@ function UploadOutfit() {
                 </div>
             )}
 
-            <form onSubmit={handleClothingSubmit} className="form-container">
+            <form onSubmit={(e) => e.preventDefault()} className="form-container">
                 <h1>Upload Clothing Item</h1>
                 <input type="file" accept="image/*" onChange={handleClothingImageChange} required />
-                <input
-                    type="text"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.target.value)}
-                    placeholder="Predicted Item Name"
-                    required
-                />
                 {clothingImagePreview && <img src={clothingImagePreview} alt="Clothing Preview" className="image-preview" />}
                 {loading && <LoadingIndicator />}
-                <button type="submit" className="form-button">Upload</button>
+                <button
+                    type="button"
+                    className="form-button"
+                    onClick={handleShowConfirmation} // Show confirmation modal on button click
+                >
+                    Upload
+                </button>
             </form>
-
-            {detectedCategory && (
-                <div className="detected-category">
-                    <h2>Detected Category: {detectedCategory}</h2>
-                </div>
-            )}
 
             <form onSubmit={handleRatingOutfitSubmit} className="form-container">
                 <h1>Rate Outfit</h1>
@@ -187,6 +188,14 @@ function UploadOutfit() {
                         ))}
                     </ul>
                 </div>
+            )}
+
+            {confirmingClothing && (
+                <ConfirmationModal
+                    itemName={detectedCategory}
+                    onConfirm={handleClothingSubmit}
+                    onCancel={() => setConfirmingClothing(false)}
+                />
             )}
         </div>
     );

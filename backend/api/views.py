@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from rest_framework import generics, status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +15,8 @@ from PIL import Image
 import traceback
 from .predict_model import predict_image
 import json
+import os
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -109,18 +111,18 @@ class OutfitListCreateView(generics.ListCreateAPIView):
         with torch.no_grad():
             predictions = model(image_tensor)
         detected_items = self.detect_clothing_items(predictions, image)
+        logger.info(f"Detected items: {detected_items}")  # Log the detected items
         return detected_items
 
     def detect_clothing_items(self, predictions, image):
         detected_items = []
         image_width, image_height = image.size
-        min_size = 30  # Minimum size of the cropped image
+        min_size = 50  # Increase the minimum size of the cropped image
 
         for element in predictions[0]['boxes']:
             x1, y1, x2, y2 = map(int, element.tolist())
-            print(f"Bounding box coordinates: ({x1}, {y1}), ({x2}, {y2})")
+            logger.info(f"Bounding box coordinates: ({x1}, {y1}), ({x2}, {y2})")
 
-            # Ensure coordinates are within image dimensions
             if x1 < 0: x1 = 0
             if y1 < 0: y1 = 0
             if x2 > image_width: x2 = image_width
@@ -129,7 +131,6 @@ class OutfitListCreateView(generics.ListCreateAPIView):
             width = x2 - x1
             height = y2 - y1
 
-            # Check if the size of the cropped image is above the minimum threshold
             if width > min_size and height > min_size:
                 item_image = image.crop((x1, y1, x2, y2))
                 item_name = "clothing_item"  # You might want to use a better naming strategy
@@ -140,7 +141,7 @@ class OutfitListCreateView(generics.ListCreateAPIView):
                     "item_image": item_image_path
                 })
             else:
-                print(f"Skipped small bounding box: ({x1}, {y1}), ({x2}, {y2}) with size ({width}, {height})")
+                logger.info(f"Skipped small bounding box: ({x1}, {y1}), ({x2}, {y2}) with size ({width}, {height})")
 
         return detected_items
 
@@ -255,15 +256,16 @@ class PredictItemDetails(APIView):
             if not image:
                 return Response({"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Predict the item name here
-            item_name = self.predict_item_name(image)
-            
-            return Response({"item_name": item_name}, status=status.HTTP_200_OK)
-        except Exception as e:
-            logger.error(f"Error predicting item name: {str(e)}")
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Save the image temporarily to the media folder
+            temp_image_path = os.path.join(settings.MEDIA_ROOT, 'temp_image.jpg')
+            with open(temp_image_path, 'wb+') as temp_file:
+                for chunk in image.chunks():
+                    temp_file.write(chunk)
 
-    def predict_item_name(self, image):
-        # Implement your prediction logic here
-        item_name = "Predicted Item Name"  # Replace with your prediction logic
-        return item_name
+            # Predict the item category here
+            category = predict_image(temp_image_path)
+            
+            return Response({"category": category}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error predicting item category: {str(e)}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

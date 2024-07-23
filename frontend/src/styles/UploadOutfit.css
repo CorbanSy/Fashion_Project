@@ -25,7 +25,7 @@
 }
 
 .confirmation-container {
-    background: white;
+    background: rgb(112, 7, 173);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -54,5 +54,5 @@
     margin-top: 20px;
     text-align: center;
     font-size: 1.2em;
-    color: white;
+    color: rgb(227, 226, 230);
 }
