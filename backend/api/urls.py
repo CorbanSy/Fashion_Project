@@ -7,6 +7,7 @@ from .views import (
     OutfitListCreateView,
     OutfitRecommendationView,
     VirtualClosetView,
+    VirtualClosetDeleteView,  # Import the delete view
     ImageUploadView,
     ConfirmDetectedItemsView,
     PredictItemDetails,
@@ -21,6 +22,7 @@ urlpatterns = [
     path("confirm-detected-items/", ConfirmDetectedItemsView.as_view(), name="confirm_detected_items"),
     path('predict-item-details/', PredictItemDetails.as_view(), name='predict-item-details'),
     path("virtual-closet/", VirtualClosetView.as_view(), name="virtual-closet"),
+    path('virtual-closet/<int:pk>/', VirtualClosetDeleteView.as_view(), name="virtual-closet-delete"),  # Add this line
     path('upload-image/', ImageUploadView.as_view(), name="upload-image"),
     path('profile/', UserProfileView.as_view(), name='user-profile'),
 ]

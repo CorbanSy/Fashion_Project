@@ -5,6 +5,7 @@ import "../styles/ViewOutfits.css"; // Ensure you have this CSS file
 function ViewOutfits() {
     const [outfits, setOutfits] = useState([]);
     const [clothingItems, setClothingItems] = useState([]);
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         const fetchOutfits = async () => {
@@ -26,17 +27,34 @@ function ViewOutfits() {
         fetchOutfits();
     }, []);
 
+    const handleDelete = async (id, itemType) => {
+        const confirmed = window.confirm(`Are you sure you want to delete this ${itemType}?`);
+        if (confirmed) {
+            try {
+                await api.delete(`/virtual-closet/${id}/`);
+                setOutfits(outfits.filter(item => item.id !== id));
+                setClothingItems(clothingItems.filter(item => item.id !== id));
+            } catch (error) {
+                console.error(`Error deleting ${itemType}:`, error);
+                alert(`Failed to delete ${itemType}. Please try again.`);
+            }
+        }
+    };
+
     const renderOutfitBox = (outfit, index) => {
         if (outfit) {
             return (
-                <div key={outfit.id || index} className="outfit-box">
+                <div key={outfit.id} className="outfit-box">
                     <h2>{outfit.item_name || `Outfit ${index + 1}`}</h2>
                     <img src={outfit.item_image} alt={outfit.item_name || `Outfit ${index + 1}`} />
+                    {editMode && (
+                        <button className="delete-button" onClick={() => handleDelete(outfit.id, 'outfit')}>X</button>
+                    )}
                 </div>
             );
         } else {
             return (
-                <div key={index} className="outfit-box placeholder">
+                <div key={`outfit-placeholder-${index}`} className="outfit-box placeholder">
                     <h2>Upload Outfit</h2>
                 </div>
             );
@@ -46,14 +64,17 @@ function ViewOutfits() {
     const renderClothingBox = (item, index) => {
         if (item) {
             return (
-                <div key={item.id || index} className="clothing-box">
+                <div key={item.id} className="clothing-box">
                     <h2>{item.item_name || `Clothing Item ${index + 1}`}</h2>
                     <img src={item.item_image} alt={item.item_name || `Clothing Item ${index + 1}`} />
+                    {editMode && (
+                        <button className="delete-button" onClick={() => handleDelete(item.id, 'clothing item')}>X</button>
+                    )}
                 </div>
             );
         } else {
             return (
-                <div key={index} className="clothing-box placeholder">
+                <div key={`clothing-placeholder-${index}`} className="clothing-box placeholder">
                     <h2>Upload Clothing</h2>
                 </div>
             );
@@ -61,14 +82,17 @@ function ViewOutfits() {
     };
 
     return (
-        <div className="view-outfits-container">
+        <div className={`view-outfits-container ${editMode ? 'edit-mode' : ''}`}>
+            <button className="edit-button" onClick={() => setEditMode(!editMode)}>
+                {editMode ? 'Done' : 'Edit Closet'}
+            </button>
             <h1>View Outfits</h1>
             <div className="outfits-grid">
-                {Array.from({ length: 12 }).map((_, index) => renderOutfitBox(outfits[index], index))}
+                {outfits.map((outfit, index) => renderOutfitBox(outfit, index))}
             </div>
             <h1>View Clothing</h1>
             <div className="clothing-grid">
-                {Array.from({ length: 12 }).map((_, index) => renderClothingBox(clothingItems[index], index))}
+                {clothingItems.map((item, index) => renderClothingBox(item, index))}
             </div>
         </div>
     );

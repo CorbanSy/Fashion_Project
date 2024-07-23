@@ -153,7 +153,7 @@ function UploadOutfit() {
                     type="text"
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
-                    placeholder="Item Name"
+                    placeholder="Predicted Item Name"
                     required
                 />
                 {clothingImagePreview && <img src={clothingImagePreview} alt="Clothing Preview" className="image-preview" />}

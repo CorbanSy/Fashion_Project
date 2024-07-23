@@ -95,7 +95,7 @@ export const fetchVirtualCloset = () => {
 };
 
 export const predictItemDetails = (formData) => {
-    return api.post("/predict-item-details", formData, {
+    return api.post("/predict-item-details/", formData, {
         headers: {
             "Content-Type": "multiplart/form-data",
         },
