@@ -67,7 +67,7 @@ function Navbar({ isLoggedIn, onLogout }) {
                     onMouseLeave={() => toggleRateOutfitDropdown(false)}
                 >
                     <div className="nav-link">
-                        Rate Outfit
+                        Upload Outfit
                         {rateOutfitDropdownOpen && (
                             <div className="dropdown-menu">
                                 <Link to="/rate-outfit#upload-clothing-item" className="dropdown-item">Upload Clothing Item</Link>

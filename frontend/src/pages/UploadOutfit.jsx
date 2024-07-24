@@ -129,6 +129,10 @@ function UploadOutfit() {
         }
     };
 
+    const handleRateCurrentOutfit = () => {
+        navigate('/view-outfits');
+    };
+
     return (
         <div className="upload-forms-container">
             <form onSubmit={handleOutfitSubmit} className="form-container">
@@ -197,6 +201,11 @@ function UploadOutfit() {
                     onCancel={() => setConfirmingClothing(false)}
                 />
             )}
+
+            <div className="form-container">
+                <h1>Rate Current Outfit</h1>
+                <button className="form-button" onClick={handleRateCurrentOutfit}>Go to View Outfits</button>
+            </div>
         </div>
     );
 }

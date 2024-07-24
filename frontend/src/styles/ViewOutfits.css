@@ -10,6 +10,7 @@
     flex-direction: column;
     align-items: center;
     overflow-x: hidden;
+    justify-content: center; /* Center content vertically */
 }
 
 .view-outfits-container h1 {
@@ -61,7 +62,17 @@
     height: 200px;
 }
 
-.edit-button {
+.buttons-container {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transform: translateY(-50%);
+}
+
+.edit-button, .rate-button {
     background-color: #b300ff;
     color: white;
     padding: 10px 20px;
@@ -69,10 +80,6 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
-    margin-bottom: 20px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
 }
 
 .delete-button {
@@ -91,5 +98,23 @@
 }
 
 .edit-mode .delete-button {
+    display: block;
+}
+
+.select-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 1em;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: none;
+}
+
+.rating-mode .select-button {
     display: block;
 }

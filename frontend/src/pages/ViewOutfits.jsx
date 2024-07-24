@@ -6,6 +6,7 @@ function ViewOutfits() {
     const [outfits, setOutfits] = useState([]);
     const [clothingItems, setClothingItems] = useState([]);
     const [editMode, setEditMode] = useState(false);
+    const [ratingMode, setRatingMode] = useState(false); // New state for rating mode
 
     useEffect(() => {
         const fetchOutfits = async () => {
@@ -41,6 +42,11 @@ function ViewOutfits() {
         }
     };
 
+    const handleRateOutfit = (id) => {
+        // Logic to handle rating the outfit can be added here
+        alert(`Rate outfit with ID: ${id}`);
+    };
+
     const renderOutfitBox = (outfit, index) => {
         if (outfit) {
             return (
@@ -49,6 +55,9 @@ function ViewOutfits() {
                     <img src={outfit.item_image} alt={outfit.item_name || `Outfit ${index + 1}`} />
                     {editMode && (
                         <button className="delete-button" onClick={() => handleDelete(outfit.id, 'outfit')}>X</button>
+                    )}
+                    {ratingMode && (
+                        <button className="select-button" onClick={() => handleRateOutfit(outfit.id)}>Select</button>
                     )}
                 </div>
             );
@@ -83,9 +92,14 @@ function ViewOutfits() {
 
     return (
         <div className={`view-outfits-container ${editMode ? 'edit-mode' : ''}`}>
-            <button className="edit-button" onClick={() => setEditMode(!editMode)}>
-                {editMode ? 'Done' : 'Edit Closet'}
-            </button>
+            <div className="buttons-container">
+                <button className="edit-button" onClick={() => setEditMode(!editMode)}>
+                    {editMode ? 'Done' : 'Edit Closet'}
+                </button>
+                <button className="rate-button" onClick={() => setRatingMode(!ratingMode)}>
+                    {ratingMode ? 'Done' : 'Rate Outfit'}
+                </button>
+            </div>
             <h1>View Outfits</h1>
             <div className="outfits-grid">
                 {outfits.map((outfit, index) => renderOutfitBox(outfit, index))}
