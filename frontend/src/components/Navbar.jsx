@@ -8,7 +8,7 @@ function Navbar({ isLoggedIn, onLogout }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const [fashionTipsDropdownOpen, setFashionTipsDropdownOpen] = useState(false);
-    const [rateMyOutfitDropdownOpen, setRateMyOutfitDropdownOpen] = useState(false);
+    const [rateOutfitDropdownOpen, setRateOutfitDropdownOpen] = useState(false); // New state for Rate Outfit dropdown
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleLogout = () => {
@@ -28,8 +28,8 @@ function Navbar({ isLoggedIn, onLogout }) {
         setFashionTipsDropdownOpen(isOpen);
     };
 
-    const toggleRateMyOutfitDropdown = (isOpen) => {
-        setRateMyOutfitDropdownOpen(isOpen);
+    const toggleRateOutfitDropdown = (isOpen) => { // New function to toggle Rate Outfit dropdown
+        setRateOutfitDropdownOpen(isOpen);
     };
 
     const handleSearch = (event) => {
@@ -63,15 +63,16 @@ function Navbar({ isLoggedIn, onLogout }) {
                 </li>
                 <li
                     className="nav-item"
-                    onMouseEnter={() => toggleRateMyOutfitDropdown(true)}
-                    onMouseLeave={() => toggleRateMyOutfitDropdown(false)}
+                    onMouseEnter={() => toggleRateOutfitDropdown(true)} // Add new dropdown
+                    onMouseLeave={() => toggleRateOutfitDropdown(false)}
                 >
                     <div className="nav-link">
-                        Rate My Outfit
-                        {rateMyOutfitDropdownOpen && (
+                        Rate Outfit
+                        {rateOutfitDropdownOpen && (
                             <div className="dropdown-menu">
-                                <Link to="/rate-outfit#upload-outfit" className="dropdown-item">Upload Outfit</Link>
                                 <Link to="/rate-outfit#upload-clothing-item" className="dropdown-item">Upload Clothing Item</Link>
+                                <Link to="/rate-outfit#upload-outfit" className="dropdown-item">Upload Outfit</Link>
+                                <Link to="/rate-outfit#rate-outfit" className="dropdown-item">Rate Outfit</Link>
                             </div>
                         )}
                     </div>

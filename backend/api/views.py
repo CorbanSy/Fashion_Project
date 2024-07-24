@@ -117,7 +117,7 @@ class OutfitListCreateView(generics.ListCreateAPIView):
     def detect_clothing_items(self, predictions, image):
         detected_items = []
         image_width, image_height = image.size
-        min_size = 50  # Increase the minimum size of the cropped image
+        min_size = 20  # Increase the minimum size of the cropped image
 
         for element in predictions[0]['boxes']:
             x1, y1, x2, y2 = map(int, element.tolist())
@@ -133,13 +133,14 @@ class OutfitListCreateView(generics.ListCreateAPIView):
 
             if width > min_size and height > min_size:
                 item_image = image.crop((x1, y1, x2, y2))
-                item_name = "clothing_item"  # You might want to use a better naming strategy
-                item_image_path = f"media/closet_items/{item_name}_{x1}_{y1}.jpg"
+                item_name = f"clothing_item_{x1}_{y1}"  # Use a better naming strategy
+                item_image_path = f"media/closet_items/{item_name}.jpg"
                 item_image.save(item_image_path)
                 detected_items.append({
                     "item_name": item_name,
                     "item_image": item_image_path
                 })
+                logger.info(f"Detected item saved: {item_name}")
             else:
                 logger.info(f"Skipped small bounding box: ({x1}, {y1}), ({x2}, {y2}) with size ({width}, {height})")
 
