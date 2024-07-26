@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react"; // Properly import React
-import { Link } from "react-router-dom";
-import api from "../api";
+import React, { useState, useEffect, useRef } from "react";
+import api from "../api"; // Correct relative path to api.js
 import "../styles/VirtualCloset_css_files/virtual-closet-container.css";
 import "../styles/VirtualCloset_css_files/title.css";
 import "../styles/VirtualCloset_css_files/button-list.css";
@@ -13,9 +12,13 @@ import "../styles/VirtualCloset_css_files/canvas-container.css";
 import "../styles/VirtualCloset_css_files/generate-parameters.css";
 import backgroundImage from "../assets/virtual-closet-background.png.webp";
 import male_mann from "../assets/male-mann-body.jpg";
-import Draggable from 'react-draggable';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+import VirtualClosetContainer from "../components/Virtual_Closet/VirtualClosetContainer";
+import Title from "../components/Virtual_Closet/Title";
+import ButtonList from "../components/Virtual_Closet/ButtonList";
+import Modal from "../components/Virtual_Closet/Modal";
+import ButtonContainer from "../components/Virtual_Closet/ButtonContainer";
+import CanvasContainer from "../components/Virtual_Closet/CanvasContainer";
 
 const categories = [
     { name: "Hats", subcategories: ["Hat"] },
@@ -268,167 +271,61 @@ function VirtualCloset() {
         setDesiredStyle(desiredStyle.filter(s => s !== style));
     };
 
-    const renderCanvas = () => (
-        <div className="canvas-container">
-            <button className="close-button" onClick={isCreateCanvasOpen ? closeCreateCanvas : closeGenerateCanvas}>×</button>
-            <div className="canvas">
-                <img src={male_mann} alt="Mannequin" className="mannequin-image" ref={mannequinRef} />
-                {canvasItems.map((item, index) => (
-                    <Draggable
-                        key={index}
-                        defaultPosition={{ x: item.x, y: item.y }}
-                        onStop={(e, data) => handleDragStop(e, data, item)}
-                        nodeRef={item.ref}
-                    >
-                        <div
-                            className={`closet-item ${item.isOnMannequin ? 'on-mannequin' : ''}`}
-                            ref={item.ref}
-                            onDoubleClick={() => handleRemoveItem(item)}
-                        >
-                            <img src={item.item_image} alt={item.item_name} />
-                            <h4>{item.item_name}</h4>
-                        </div>
-                    </Draggable>
-                ))}
-            </div>
-            {isCreateCanvasOpen && (
-                <div className="canvas-buttons">
-                    <button className="reset-button" onClick={handleResetCanvas}>Reset</button>
-                    <button className="confirm-button" onClick={handleConfirmOutfit}>Create Outfit</button>
-                </div>
-            )}
-            {isGenerateCanvasOpen && (
-                <div className="generate-parameters">
-                    <div className="parameter-group">
-                        <label>Desired Colors:</label>
-                        <div className="parameter-buttons">
-                            <button type="button" onClick={handleAddColors}>Add Colors</button>
-                            <div className="selected-parameters">
-                                {desiredColors.map((color, index) => {
-                                    const colorObject = colorOptions.find(c => c.name === color);
-                                    return (
-                                        <div key={index} className="color-badge" style={{ backgroundColor: colorObject?.color }}>
-                                            {color}
-                                            <FontAwesomeIcon icon={faTimes} onClick={() => handleRemoveColor(color)} className="remove-icon" />
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            {showColorsDropdown && (
-                                <select multiple onChange={handleSelectColors}>
-                                    {colorOptions.map((color, index) => (
-                                        <option key={index} value={color.name}>
-                                            {color.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            )}
-                        </div>
-                    </div>
-                    <div className="parameter-group">
-                        <label>Desired Style:</label>
-                        <div className="parameter-buttons">
-                            <button type="button" onClick={handleAddStyles}>Add Styles</button>
-                            <div className="selected-parameters">
-                                {desiredStyle.map((style, index) => (
-                                    <div key={index} className="style-badge">
-                                        {style}
-                                        <FontAwesomeIcon icon={faTimes} onClick={() => handleRemoveStyle(style)} className="remove-icon" />
-                                    </div>
-                                ))}
-                            </div>
-                            {showStylesDropdown && (
-                                <select multiple onChange={handleSelectStyles}>
-                                    {styleOptions.map((style, index) => (
-                                        <option key={index} value={style}>
-                                            {style}
-                                        </option>
-                                    ))}
-                                </select>
-                            )}
-                        </div>
-                    </div>
-                    <div className="parameter-group">
-                        <label>Event:</label>
-                        <div className="parameter-buttons">
-                            <button type="button" onClick={handleAddEvent}>Select Event</button>
-                            <div className="selected-parameters">
-                                {event && (
-                                    <div className="style-badge">
-                                        {event}
-                                        <FontAwesomeIcon icon={faTimes} onClick={() => setEvent("")} className="remove-icon" />
-                                    </div>
-                                )}
-                            </div>
-                            {showEventsDropdown && (
-                                <select onChange={handleSelectEvent}>
-                                    <option value="">Select Event</option>
-                                    {eventOptions.map((eventOption, index) => (
-                                        <option key={index} value={eventOption}>
-                                            {eventOption}
-                                        </option>
-                                    ))}
-                                </select>
-                            )}
-                        </div>
-                    </div>
-                    <button className="generate-button" onClick={handleGenerateOutfit}>Generate Outfit</button>
-                </div>
-            )}
-        </div>
-    );
-
     return (
-        <div className="virtual-closet-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
-            <h2 className="virtual-closet-title">Your Virtual Closet</h2>
-            <div className="button-list">
-                {categories.map(({ name, subcategories }) => (
-                    <div key={name} className="category-section">
-                        <div className="category-header" onClick={() => toggleCategory(name)}>
-                            <h3>{name}<span>{expandedCategories[name] ? '▲' : '▼'}</span></h3>
-                        </div>
-                        <div className={`subcategory-list ${expandedCategories[name] ? 'show' : ''}`}>
-                            {subcategories.map(subcategory => (
-                                <button key={subcategory} className="closet-button" onClick={() => handleSubcategoryClick(subcategory)}>
-                                    {subcategory}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
-            <div className="button-container">
-                <Link to="/view-outfits" className="view-outfits-button">View Outfits</Link>
-                <button onClick={handleCreateOutfitClick} className="create-outfit-button">Create Outfit</button>
-                <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
-            </div>
-
-            {isCreateCanvasOpen && renderCanvas()}
-            {isGenerateCanvasOpen && renderCanvas()}
-
-            {isCategoryModalOpen && (
-                <div className="modal-overlay" onClick={() => setCategoryModalOpen(false)}>
-                    <div className="modal-container" onClick={e => e.stopPropagation()}>
-                        <div className="modal-title-wrapper">
-                            <button className="modal-close-button" onClick={closeModal}>×</button>
-                            <h2 className="modal-title">{categoryModalTitle}</h2>
-                        </div>
-                        <div className="category-items">
-                            {selectedCategoryItems.length > 0 ? (
-                                selectedCategoryItems.map(item => (
-                                    <div key={item.id} className={`closet-item`} onClick={() => handleItemClick(item)}>
-                                        <img src={item.item_image} alt={item.item_name} />
-                                        <h4>{item.item_name}</h4>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="no-items-message">No items found in this category</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
+        <VirtualClosetContainer>
+            <Title title="Your Virtual Closet" />
+            <ButtonList
+                categories={categories}
+                toggleCategory={toggleCategory}
+                handleSubcategoryClick={handleSubcategoryClick}
+                expandedCategories={expandedCategories}
+            />
+            <ButtonContainer
+                handleCreateOutfitClick={handleCreateOutfitClick}
+                handleGenerateOutfitClick={handleGenerateOutfitClick}
+            />
+            {isCreateCanvasOpen && (
+                <CanvasContainer
+                    isCreateCanvasOpen={isCreateCanvasOpen}
+                    isGenerateCanvasOpen={isGenerateCanvasOpen}
+                    closeCreateCanvas={closeCreateCanvas}
+                    closeGenerateCanvas={closeGenerateCanvas}
+                    canvasItems={canvasItems}
+                    handleDragStop={handleDragStop}
+                    handleRemoveItem={handleRemoveItem}
+                    handleResetCanvas={handleResetCanvas}
+                    handleConfirmOutfit={handleConfirmOutfit}
+                    male_mann={male_mann}
+                    mannequinRef={mannequinRef}
+                    colorOptions={colorOptions}
+                    desiredColors={desiredColors}
+                    handleAddColors={handleAddColors}
+                    handleSelectColors={handleSelectColors}
+                    handleRemoveColor={handleRemoveColor}
+                    showColorsDropdown={showColorsDropdown}
+                    styleOptions={styleOptions}
+                    desiredStyle={desiredStyle}
+                    handleAddStyles={handleAddStyles}
+                    handleSelectStyles={handleSelectStyles}
+                    handleRemoveStyle={handleRemoveStyle}
+                    showStylesDropdown={showStylesDropdown}
+                    eventOptions={eventOptions}
+                    event={event}
+                    handleAddEvent={handleAddEvent}
+                    handleSelectEvent={handleSelectEvent}
+                    showEventsDropdown={showEventsDropdown}
+                    handleGenerateOutfit={handleGenerateOutfit}
+                />
             )}
-        </div>
+            {isCategoryModalOpen && (
+                <Modal
+                    categoryModalTitle={categoryModalTitle}
+                    selectedCategoryItems={selectedCategoryItems}
+                    handleItemClick={handleItemClick}
+                    closeModal={closeModal}
+                />
+            )}
+        </VirtualClosetContainer>
     );
 }
 
