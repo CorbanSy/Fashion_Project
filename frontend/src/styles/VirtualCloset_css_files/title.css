@@ -1,0 +1,14 @@
+/* Title Styling */
+.virtual-closet-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    left: 35%;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}

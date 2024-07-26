@@ -1,0 +1,28 @@
+/* Modal Styling */
+.modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 1.5em;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.no-items-message {
+    color: rgb(254, 254, 254);
+    font-size: 1.2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}

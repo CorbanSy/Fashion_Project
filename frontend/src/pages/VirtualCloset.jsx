@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useRef } from "react"; // Properly import React
 import { Link } from "react-router-dom";
 import api from "../api";
-import "../styles/VirtualCloset.css";
+import "../styles/VirtualCloset_css_files/virtual-closet-container.css";
+import "../styles/VirtualCloset_css_files/title.css";
+import "../styles/VirtualCloset_css_files/button-list.css";
+import "../styles/VirtualCloset_css_files/category-section.css";
+import "../styles/VirtualCloset_css_files/modal.css";
+import "../styles/VirtualCloset_css_files/closet-item.css";
+import "../styles/VirtualCloset_css_files/mannequin.css";
+import "../styles/VirtualCloset_css_files/button-container.css";
+import "../styles/VirtualCloset_css_files/canvas-container.css";
+import "../styles/VirtualCloset_css_files/generate-parameters.css";
 import backgroundImage from "../assets/virtual-closet-background.png.webp";
 import male_mann from "../assets/male-mann-body.jpg";
 import Draggable from 'react-draggable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const categories = [
     { name: "Hats", subcategories: ["Hat"] },
@@ -12,6 +23,49 @@ const categories = [
     { name: "Bottoms", subcategories: ["Shorts", "Skirt", "Pants"] },
     { name: "Shoes", subcategories: ["Shoes"] },
     { name: "Not Sure/Other", subcategories: ["Not sure", "Other", "Skip"] },
+];
+
+const styleOptions = [
+    '00s', '20s', '30s', '40s', '50s', '60s', '70s', '80s', '90s',
+    'Androgynous', 'Artsy', 'Ballerina', 'Basic', 'Beach', 'Biker', 'Boho', 'Business casual',
+    'Casual', 'Comfy', 'Country', 'Dark Academia', 'Eclectic', 'Edgy', 'Elegant', 'Ethereal',
+    'Feminine', 'Folk', 'Formal', 'French', 'Fun', 'Funky', 'Garconne', 'Geek chic', 'Girl next door',
+    'Glamorous', 'Goth', 'Granola', 'Grunge', 'Hipster', 'Kooky', 'Lagenlook', 'Masculine', 'Military',
+    'Minimalist', 'Modest', 'Prairie', 'Preppy', 'Punk', 'Racy', 'Rocker', 'Romantic', 'Skateboard',
+    'Sporty', 'Street', 'Toddler', 'Traditional', 'Vintage'
+];
+
+const colorOptions = [
+    { name: 'Red', color: '#FF0000' },
+    { name: 'Crimson', color: '#DC143C' },
+    { name: 'Maroon', color: '#800000' },
+    { name: 'Orange', color: '#FFA500' },
+    { name: 'Coral', color: '#FF7F50' },
+    { name: 'Salmon', color: '#FA8072' },
+    { name: 'Yellow', color: '#FFFF00' },
+    { name: 'Gold', color: '#FFD700' },
+    { name: 'Green', color: '#008000' },
+    { name: 'Lime', color: '#00FF00' },
+    { name: 'Olive', color: '#808000' },
+    { name: 'Blue', color: '#0000FF' },
+    { name: 'Navy', color: '#000080' },
+    { name: 'Sky Blue', color: '#87CEEB' },
+    { name: 'Purple', color: '#800080' },
+    { name: 'Lavender', color: '#E6E6FA' },
+    { name: 'Magenta', color: '#FF00FF' },
+    { name: 'Pink', color: '#FFC0CB' },
+    { name: 'Hot Pink', color: '#FF69B4' },
+    { name: 'Brown', color: '#A52A2A' },
+    { name: 'Chocolate', color: '#D2691E' },
+    { name: 'Tan', color: '#D2B48C' },
+    { name: 'Gray', color: '#808080' },
+    { name: 'Silver', color: '#C0C0C0' },
+    { name: 'Black', color: '#000000' },
+    { name: 'White', color: '#FFFFFF' }
+];
+
+const eventOptions = [
+    'Casual', 'Formal', 'Party', 'Business', 'Sports', 'Vacation', 'Wedding', 'Interview', 'Date Night'
 ];
 
 const zones = {
@@ -51,6 +105,12 @@ function VirtualCloset() {
     const [expandedCategories, setExpandedCategories] = useState({});
     const [canvasItems, setCanvasItems] = useState([]);
     const [itemRefs, setItemRefs] = useState({});
+    const [desiredColors, setDesiredColors] = useState([]);
+    const [desiredStyle, setDesiredStyle] = useState([]);
+    const [event, setEvent] = useState("");
+    const [showColorsDropdown, setShowColorsDropdown] = useState(false);
+    const [showStylesDropdown, setShowStylesDropdown] = useState(false);
+    const [showEventsDropdown, setShowEventsDropdown] = useState(false);
 
     const mannequinRef = useRef(null);
 
@@ -78,10 +138,12 @@ function VirtualCloset() {
 
     const handleCreateOutfitClick = () => {
         setCreateCanvasOpen(true);
+        setGenerateCanvasOpen(false);
     };
 
     const handleGenerateOutfitClick = () => {
         setGenerateCanvasOpen(true);
+        setCreateCanvasOpen(false);
     };
 
     const closeCreateCanvas = () => {
@@ -153,6 +215,11 @@ function VirtualCloset() {
         alert("Outfit confirmed!");
     };
 
+    const handleGenerateOutfit = () => {
+        //handle outfit generation logic here using desiredColors, desiredStyle, and event
+        alert(`Outfit generated with Colors: ${desiredColors.join(', ')}, Style: ${desiredStyle.join(', ')}, Event: ${event}`);
+    };
+
     const handleResetCanvas = () => {
         setCanvasItems([]);
     };
@@ -161,6 +228,155 @@ function VirtualCloset() {
         console.log("Removing item: ", item); // Log the item to be removed
         setCanvasItems(prevItems => prevItems.filter(ci => ci.id !== item.id));
     };
+
+    const handleAddColors = () => {
+        setShowColorsDropdown(!showColorsDropdown);
+    };
+
+    const handleAddStyles = () => {
+        setShowStylesDropdown(!showStylesDropdown);
+    };
+
+    const handleAddEvent = () => {
+        setShowEventsDropdown(!showEventsDropdown);
+    };
+
+    const handleSelectColors = (e) => {
+        const values = Array.from(e.target.selectedOptions, option => option.value);
+        const newColors = values.filter(value => !desiredColors.includes(value));
+        setDesiredColors([...desiredColors, ...newColors]);
+        setShowColorsDropdown(false);
+    };
+
+    const handleSelectStyles = (e) => {
+        const values = Array.from(e.target.selectedOptions, option => option.value);
+        const newStyles = values.filter(value => !desiredStyle.includes(value));
+        setDesiredStyle([...desiredStyle, ...newStyles]);
+        setShowStylesDropdown(false);
+    };
+
+    const handleSelectEvent = (e) => {
+        setEvent(e.target.value);
+        setShowEventsDropdown(false);
+    };
+
+    const handleRemoveColor = (color) => {
+        setDesiredColors(desiredColors.filter(c => c !== color));
+    };
+
+    const handleRemoveStyle = (style) => {
+        setDesiredStyle(desiredStyle.filter(s => s !== style));
+    };
+
+    const renderCanvas = () => (
+        <div className="canvas-container">
+            <button className="close-button" onClick={isCreateCanvasOpen ? closeCreateCanvas : closeGenerateCanvas}>×</button>
+            <div className="canvas">
+                <img src={male_mann} alt="Mannequin" className="mannequin-image" ref={mannequinRef} />
+                {canvasItems.map((item, index) => (
+                    <Draggable
+                        key={index}
+                        defaultPosition={{ x: item.x, y: item.y }}
+                        onStop={(e, data) => handleDragStop(e, data, item)}
+                        nodeRef={item.ref}
+                    >
+                        <div
+                            className={`closet-item ${item.isOnMannequin ? 'on-mannequin' : ''}`}
+                            ref={item.ref}
+                            onDoubleClick={() => handleRemoveItem(item)}
+                        >
+                            <img src={item.item_image} alt={item.item_name} />
+                            <h4>{item.item_name}</h4>
+                        </div>
+                    </Draggable>
+                ))}
+            </div>
+            {isCreateCanvasOpen && (
+                <div className="canvas-buttons">
+                    <button className="reset-button" onClick={handleResetCanvas}>Reset</button>
+                    <button className="confirm-button" onClick={handleConfirmOutfit}>Create Outfit</button>
+                </div>
+            )}
+            {isGenerateCanvasOpen && (
+                <div className="generate-parameters">
+                    <div className="parameter-group">
+                        <label>Desired Colors:</label>
+                        <div className="parameter-buttons">
+                            <button type="button" onClick={handleAddColors}>Add Colors</button>
+                            <div className="selected-parameters">
+                                {desiredColors.map((color, index) => {
+                                    const colorObject = colorOptions.find(c => c.name === color);
+                                    return (
+                                        <div key={index} className="color-badge" style={{ backgroundColor: colorObject?.color }}>
+                                            {color}
+                                            <FontAwesomeIcon icon={faTimes} onClick={() => handleRemoveColor(color)} className="remove-icon" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            {showColorsDropdown && (
+                                <select multiple onChange={handleSelectColors}>
+                                    {colorOptions.map((color, index) => (
+                                        <option key={index} value={color.name}>
+                                            {color.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    </div>
+                    <div className="parameter-group">
+                        <label>Desired Style:</label>
+                        <div className="parameter-buttons">
+                            <button type="button" onClick={handleAddStyles}>Add Styles</button>
+                            <div className="selected-parameters">
+                                {desiredStyle.map((style, index) => (
+                                    <div key={index} className="style-badge">
+                                        {style}
+                                        <FontAwesomeIcon icon={faTimes} onClick={() => handleRemoveStyle(style)} className="remove-icon" />
+                                    </div>
+                                ))}
+                            </div>
+                            {showStylesDropdown && (
+                                <select multiple onChange={handleSelectStyles}>
+                                    {styleOptions.map((style, index) => (
+                                        <option key={index} value={style}>
+                                            {style}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    </div>
+                    <div className="parameter-group">
+                        <label>Event:</label>
+                        <div className="parameter-buttons">
+                            <button type="button" onClick={handleAddEvent}>Select Event</button>
+                            <div className="selected-parameters">
+                                {event && (
+                                    <div className="style-badge">
+                                        {event}
+                                        <FontAwesomeIcon icon={faTimes} onClick={() => setEvent("")} className="remove-icon" />
+                                    </div>
+                                )}
+                            </div>
+                            {showEventsDropdown && (
+                                <select onChange={handleSelectEvent}>
+                                    <option value="">Select Event</option>
+                                    {eventOptions.map((eventOption, index) => (
+                                        <option key={index} value={eventOption}>
+                                            {eventOption}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    </div>
+                    <button className="generate-button" onClick={handleGenerateOutfit}>Generate Outfit</button>
+                </div>
+            )}
+        </div>
+    );
 
     return (
         <div className="virtual-closet-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -187,41 +403,8 @@ function VirtualCloset() {
                 <button onClick={handleGenerateOutfitClick} className="generate-outfit-button">Generate Outfit (AI)</button>
             </div>
 
-            {isCreateCanvasOpen && (
-                <div className="canvas-container">
-                    <button className="close-button" onClick={closeCreateCanvas}>×</button>
-                    <div className="canvas">
-                        <img src={male_mann} alt="Mannequin" className="mannequin-image" ref={mannequinRef} />
-                        {canvasItems.map((item, index) => (
-                            <Draggable
-                                key={index}
-                                defaultPosition={{ x: item.x, y: item.y }}
-                                onStop={(e, data) => handleDragStop(e, data, item)}
-                                nodeRef={item.ref}
-                            >
-                                <div
-                                    className={`closet-item ${item.isOnMannequin ? 'on-mannequin' : ''}`}
-                                    ref={item.ref}
-                                    onDoubleClick={() => handleRemoveItem(item)}
-                                >
-                                    <img src={item.item_image} alt={item.item_name} />
-                                    <h4>{item.item_name}</h4>
-                                </div>
-                            </Draggable>
-                        ))}
-                    </div>
-                    <div className="canvas-buttons">
-                        <button className="reset-button" onClick={handleResetCanvas}>Reset</button>
-                        <button className="confirm-button" onClick={handleConfirmOutfit}>Confirm Outfit</button>
-                    </div>
-                </div>
-            )}
-
-            {isGenerateCanvasOpen && (
-                <div className="canvas-container">
-                    <button className="close-button" onClick={closeGenerateCanvas}>×</button>
-                </div>
-            )}
+            {isCreateCanvasOpen && renderCanvas()}
+            {isGenerateCanvasOpen && renderCanvas()}
 
             {isCategoryModalOpen && (
                 <div className="modal-overlay" onClick={() => setCategoryModalOpen(false)}>

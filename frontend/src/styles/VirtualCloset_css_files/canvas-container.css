@@ -1,0 +1,39 @@
+/* Canvas Container Styling */
+.canvas-container {
+    position: fixed;
+    top: 23%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 60%;
+    height: 95%;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid #000000;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 20;
+    overflow-y: auto; /* Add scrollable functionality */
+}
+
+.canvas {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+    overflow: visible;
+    display: flex; /* Use flexbox for the container */
+    justify-content: space-between; /* Space between mannequin and buttons */
+    align-items: center; /* Align items to center */
+    padding: 20px; /* Add some padding */
+}
+
+/* Adjust positioning of the mannequin image */
+.canvas .mannequin-image {
+    width: 25%; /* Adjusted size to fit the canvas */
+    height: auto;
+    display: block; /* Ensure it's treated as a block element */
+    margin-top: 100px;
+}

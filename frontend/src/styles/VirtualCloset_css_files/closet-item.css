@@ -1,0 +1,33 @@
+/* Closet Item Styling */
+.closet-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    width: 100px; /* Adjusted to fit better */
+    transition: transform 0.2s;
+    cursor: grab;
+}
+
+.closet-item:hover {
+    transform: scale(1.05);
+}
+
+.closet-item img {
+    width: 100%;
+    height: auto;
+}
+
+.closet-item h4 {
+    font-size: 1em;
+    margin: 5px 0;
+    padding: 0 5px;
+    color: #000000;
+    text-align: center;
+}
+
+.closet-item.on-mannequin {
+    position: absolute;
+    pointer-events: none;
+}

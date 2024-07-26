@@ -1,0 +1,81 @@
+/* Category Section Styling */
+.category-section {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    flex-wrap: wrap;
+    z-index: 1;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.category-header h3 {
+    font-size: 1.5em;
+    margin: 10px 0;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+    text-align: left;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-header span {
+    margin-left: 10px;
+    font-size: 1.5em;
+}
+
+.subcategory-list {
+    display: none;
+    flex-wrap: nowrap;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.subcategory-list.show {
+    display: flex;
+}
+
+.closet-button {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.closet-button:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.closet-item-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.category-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    z-index: 1;
+}

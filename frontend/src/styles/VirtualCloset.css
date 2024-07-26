@@ -193,7 +193,7 @@
 
 /* Mannequin Styling */
 .mannequin-image {
-    width: 20%; /* Adjusted size to fit the canvas */
+    width: 100%; /* Adjusted size to fit the canvas */
     height: auto;
     margin: auto;
 }
@@ -233,11 +233,11 @@
 /* Canvas Container Styling */
 .canvas-container {
     position: fixed;
-    top: 20%;
+    top: 23%;
     left: 50%;
     transform: translate(-50%, 0);
     width: 60%;
-    height: 80%;
+    height: 95%;
     background-color: rgb(255, 255, 255);
     border: 2px solid #000000;
     border-radius: 10px;
@@ -255,95 +255,85 @@
     flex-grow: 1;
     width: 100%;
     position: relative;
+    overflow: visible;
+    display: flex; /* Use flexbox for the container */
+    justify-content: space-between; /* Space between mannequin and buttons */
+    align-items: center; /* Align items to center */
+    padding: 20px; /* Add some padding */
 }
 
-/* Add top padding to ensure the head is always visible */
+/* Adjust positioning of the mannequin image */
 .canvas .mannequin-image {
-    margin-top: 20px;
+    width: 25%; /* Adjusted size to fit the canvas */
+    height: auto;
+    display: block; /* Ensure it's treated as a block element */
+    margin-top: 100px;
 }
 
-.confirm-button,
-.reset-button {
+/* Parameters Section Styling */
+.generate-parameters {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align items to the right */
+    width: 30%; /* Adjust width as needed */
+}
+
+.generate-parameters .parameter-group {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.generate-parameters .parameter-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.generate-parameters .selected-parameters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.generate-parameters select {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.color-badge, .style-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #ddd;
+    color: #333;
+    display: inline-block;
+    position: relative;
+}
+
+.color-badge {
+    color: white;
+}
+
+.remove-icon {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.generate-parameters .generate-button {
+    background-color: #4caf50;
+    color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    margin-top: 20px;
 }
 
-.confirm-button {
-    background-color: green;
-    color: white;
-    margin-bottom: 10px;
-    margin-right: 10px;
-}
-
-.reset-button {
-    background-color: red;
-    color: white;
-    margin-bottom: 10px;
-    margin-left: 10px;
-}
-
-.canvas-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: red;
-    z-index: 30;
-}
-
-/* Modal Container Styling */
-.modal-container {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    width: 15%;
-    height: calc(100% - 300px);
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    padding: 20px;
-    z-index: 100;
-}
-
-.modal-title-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.modal-title {
-    font-size: 1.5em;
-    color: #000000;
-}
-
-.modal-close-button {
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: red;
-    z-index: 1000;
-}
-
-/* Miscellaneous */
-.hidden {
-    display: none;
-}
-
-.dulled {
-    opacity: 0.5;
+.generate-parameters .generate-button:hover {
+    background-color: #45a049;
 }

@@ -1,0 +1,6 @@
+/* Mannequin Styling */
+.mannequin-image {
+    width: 100%; /* Adjusted size to fit the canvas */
+    height: auto;
+    margin: auto;
+}

@@ -1,0 +1,12 @@
+/* Button List Styling */
+.button-list {
+    margin-top: 0;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 0;
+    box-sizing: border-box;
+    z-index: 1;
+}
