@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import App from "./App";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -35,23 +37,25 @@ function Main() {
     };
 
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<App isLoggedIn={isLoggedIn} onLogout={handleLogout} />}>
-                    <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-                    <Route path="home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-                    <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                    <Route path="fashion-tips" element={<ProtectedRoute><FashionTips /></ProtectedRoute>} />
-                    <Route path="login" element={<Login onLogin={handleLogin} /> }/>
-                    <Route path="register" element={<Register />} />
-                    <Route path="rate-outfit" element={<ProtectedRoute><UploadOutfit /></ProtectedRoute>} />
-                    <Route path="outfits/:outfitId/recommendations" element={<ProtectedRoute><OutfitRecommendations /></ProtectedRoute>} />
-                    <Route path="virtual-closet" element={<ProtectedRoute><VirtualCloset /></ProtectedRoute>} />
-                    <Route path="view-outfits" element={<ProtectedRoute><ViewOutfits/></ProtectedRoute>} />
-                    <Route path="*" element={<NotFound />} />
-                </Route>
-            </Routes>
-        </Router>
+        <DndProvider backend={HTML5Backend}>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<App isLoggedIn={isLoggedIn} onLogout={handleLogout} />}>
+                        <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                        <Route path="home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                        <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                        <Route path="fashion-tips" element={<ProtectedRoute><FashionTips /></ProtectedRoute>} />
+                        <Route path="login" element={<Login onLogin={handleLogin} /> }/>
+                        <Route path="register" element={<Register />} />
+                        <Route path="rate-outfit" element={<ProtectedRoute><UploadOutfit /></ProtectedRoute>} />
+                        <Route path="outfits/:outfitId/recommendations" element={<ProtectedRoute><OutfitRecommendations /></ProtectedRoute>} />
+                        <Route path="virtual-closet" element={<ProtectedRoute><VirtualCloset /></ProtectedRoute>} />
+                        <Route path="view-outfits" element={<ProtectedRoute><ViewOutfits/></ProtectedRoute>} />
+                        <Route path="*" element={<NotFound />} />
+                    </Route>
+                </Routes>
+            </Router>
+        </DndProvider>
     );
 }
 

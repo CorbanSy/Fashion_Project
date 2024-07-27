@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import api from "../api"; // Correct relative path to api.js
+import api from "../api";
 import "../styles/VirtualCloset_css_files/virtual-closet-container.css";
 import "../styles/VirtualCloset_css_files/title.css";
 import "../styles/VirtualCloset_css_files/button-list.css";
@@ -177,39 +177,44 @@ function VirtualCloset() {
     };
 
     const handleItemClick = (item) => {
+        const ref = React.createRef();
         setCanvasItems(prevItems => [
             ...prevItems,
             {
                 ...item,
                 x: 0,
                 y: 0,
-                ref: itemRefs[item.id]
+                ref
             }
         ]);
         setCategoryModalOpen(false);
     };
 
-    const handleDragStop = (e, data, item) => {
-        const mannequin = mannequinRef.current.getBoundingClientRect();
-        const itemRect = item.ref.current.getBoundingClientRect();
+    const handleDragStop = (item, data) => {
+        if (mannequinRef.current) {
+            const mannequin = mannequinRef.current.getBoundingClientRect();
+            const itemRect = item.ref?.current?.getBoundingClientRect(); // Optional chaining
 
-        const itemCategory = item.category;
-        const zoneName = itemZoneMapping[itemCategory];
-        const zone = zones[zoneName];
+            if (!itemRect) return;
 
-        const zoneX = mannequin.left + zone.x;
-        const zoneY = mannequin.top + zone.y;
-        const zoneWidth = zone.width;
-        const zoneHeight = zone.height;
+            const itemCategory = item.category;
+            const zoneName = itemZoneMapping[itemCategory];
+            const zone = zones[zoneName];
 
-        if (itemRect.left < zoneX + zoneWidth && itemRect.right > zoneX && itemRect.top < zoneY + zoneHeight && itemRect.bottom > zoneY) {
-            // Adjust position to fit the mannequin
-            const x = data.x - mannequin.left - (itemRect.width / 2);
-            const y = data.y - mannequin.top - (itemRect.height / 2);
+            const zoneX = mannequin.left + zone.x;
+            const zoneY = mannequin.top + zone.y;
+            const zoneWidth = zone.width;
+            const zoneHeight = zone.height;
 
-            setCanvasItems(prevItems => prevItems.map(ci => ci.id === item.id ? { ...ci, x, y, isOnMannequin: true } : ci));
-        } else {
-            setCanvasItems(prevItems => prevItems.map(ci => ci.id === item.id ? { ...ci, x: data.x, y: data.y, isOnMannequin: false } : ci));
+            if (itemRect.left < zoneX + zoneWidth && itemRect.right > zoneX && itemRect.top < zoneY + zoneHeight && itemRect.bottom > zoneY) {
+                // Adjust position to fit the mannequin
+                const x = data.x - mannequin.left - (itemRect.width / 2);
+                const y = data.y - mannequin.top - (itemRect.height / 2);
+
+                setCanvasItems(prevItems => prevItems.map(ci => ci.id === item.id ? { ...ci, x, y, isOnMannequin: true } : ci));
+            } else {
+                setCanvasItems(prevItems => prevItems.map(ci => ci.id === item.id ? { ...ci, x: data.x, y: data.y, isOnMannequin: false } : ci));
+            }
         }
     };
 
