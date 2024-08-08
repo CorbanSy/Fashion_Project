@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import '../styles/FashionTips.css';
 import FashionAdviceChatbot from '../components/FashionAdviceChatbot';
 
+
 const tips = [
     {
         title: "Craft a Capsule Wardrobe",
@@ -172,31 +173,31 @@ const colors = [
 
 const colorCombinations = [
     ['Red', 'Yellow', 'Blue'],
-    ['Orange', 'Green', 'Purple'],
-    ['Crimson', 'Gold', 'Navy'],
-    ['Maroon', 'Lime', 'Sky Blue'],
-    ['Coral', 'Olive', 'Lavender'],
-    ['Salmon', 'Green', 'Magenta'],
-    ['Yellow', 'Blue', 'Purple'],
-    ['Gold', 'Navy', 'Pink'],
-    ['Green', 'Sky Blue', 'Tan'],
-    ['Lime', 'Purple', 'Gray'],
-    ['Olive', 'Lavender', 'Silver'],
-    ['Blue', 'Magenta', 'White'],
-    ['Navy', 'Pink', 'Silver'],
-    ['Sky Blue', 'Brown', 'Black'],
-    ['Purple', 'Gold', 'Tan'],
-    ['Lavender', 'Maroon', 'Gray'],
-    ['Magenta', 'Green', 'Blue'],
-    ['Pink', 'Olive', 'Navy'],
-    ['Hot Pink', 'Coral', 'Silver'],
-    ['Brown', 'Sky Blue', 'White'],
-    ['Chocolate', 'Lime', 'Magenta'],
-    ['Tan', 'Purple', 'Navy'],
-    ['Gray', 'Red', 'Gold'],
+    ['Red', 'Gray', 'Gold'],
     ['Silver', 'Yellow', 'Maroon'],
+    ['White', 'Green', 'Coral'],
+    ['Orange', 'Green', 'Purple'],
+    ['Salmon', 'Green', 'Magenta'],
+    ['Magenta', 'Green', 'Blue'],
+    ['Green', 'Sky Blue', 'Tan'],
+    ['Brown', 'Sky Blue', 'White'],
+    ['Crimson', 'Gold', 'Navy'],
+    ['Purple', 'Gold', 'Tan'],
+    ['Coral', 'Olive', 'Lavender'],
+    ['Pink', 'Olive', 'Navy'],
+    ['Olive', 'Lavender', 'Silver'],
+    ['Lavender', 'Maroon', 'Gray'],
+    ['Maroon', 'Lime', 'Sky Blue'],
+    ['Chocolate', 'Lime', 'Magenta'],
+    ['Lime', 'Purple', 'Gray'],
+    ['Tan', 'Purple', 'Navy'],
+    ['Hot Pink', 'Coral', 'Silver'],
+    ['Sky Blue', 'Brown', 'Black'],
+    ['Yellow', 'Blue', 'Purple'],
+    ['Blue', 'Magenta', 'White'],
     ['Black', 'Blue', 'Salmon'],
-    ['White', 'Coral', 'Green']
+    ['Gold', 'Navy', 'Pink'],
+    ['Navy', 'Pink', 'Silver']
 ];
 
 const isLightColor = (color) => {
@@ -230,8 +231,38 @@ const FashionTips = () => {
         setSelectedColor(color);
     };
 
+    const reorderCombinations = (color) => {
+        const uniqueCombinations = new Set();
+        const groupedCombinations = {};
+        
+        colorCombinations.forEach(combination => {
+            if (combination.includes(color)) {
+                combination.forEach(col => {
+                    if (!groupedCombinations[col]) {
+                        groupedCombinations[col] = [];
+                    }
+                    groupedCombinations[col].push(combination);
+                });
+            }
+        });
+
+        return Object.keys(groupedCombinations).flatMap(key => {
+            return groupedCombinations[key].map(combination => {
+                const newCombination = [...combination];
+                newCombination.splice(newCombination.indexOf(color), 1);
+                newCombination.unshift(color);
+                const combStr = newCombination.join(',');
+                if (!uniqueCombinations.has(combStr)) {
+                    uniqueCombinations.add(combStr);
+                    return newCombination;
+                }
+                return null;
+            }).filter(Boolean);
+        });
+    };
+
     const filteredColorCombinations = selectedColor
-        ? colorCombinations.filter(combination => combination.includes(selectedColor))
+        ? reorderCombinations(selectedColor)
         : colorCombinations;
 
     return (
@@ -270,7 +301,7 @@ const FashionTips = () => {
                                         <div key={index} className="combination-row">
                                             {combination.map((color, i) => {
                                                 const colorObj = colors.find(c => c.name === color);
-                                                return (
+                                                return colorObj ? (
                                                     <div
                                                         key={i}
                                                         className="color-box"
@@ -278,7 +309,7 @@ const FashionTips = () => {
                                                     >
                                                         {color}
                                                     </div>
-                                                );
+                                                ) : null;
                                             })}
                                         </div>
                                     ))}

@@ -1,0 +1,21 @@
+.body-model-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #7f00ff; /* Purple gradient background */
+    padding: 20px;
+    width: 100%;
+}
+
+.body-images {
+    display: flex;
+    flex-direction: row; /* Arrange images side by side */
+    gap: 20px; /* Increase gap for better spacing */
+}
+
+.body-image {
+    max-width: 300px; /* Adjust the size as needed */
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}

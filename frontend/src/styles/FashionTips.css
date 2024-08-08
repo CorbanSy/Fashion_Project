@@ -1,24 +1,24 @@
-/* src/styles/FashionTips.css */
 .fashion-tips-page {
     display: flex;
     justify-content: center; /* Center the main container */
     padding: 20px;
+    background-color: #f3f4f6; /* Light background color for contrast */
 }
 
 .fashion-tips-container {
     flex-grow: 1;
     padding: 20px;
-    max-width: 800px;
-    background-color: #f9f9f9;
+    max-width: 900px; /* Slightly wider for better content fit */
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid #000000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    border: none; /* Remove border */
     margin: 0 20px; /* Adjust this value to ensure proper centering */
 }
 
 .fashion-tips-container h1 {
     text-align: center;
-    color: #000000;
+    color: #333333; /* Softer black for less contrast */
 }
 
 .tips-list {
@@ -28,7 +28,7 @@
 .tip-item {
     margin-bottom: 20px;
     padding: 15px;
-    border: 1px solid #000000;
+    border: 1px solid #e0e0e0; /* Lighter border */
     border-radius: 8px;
     background-color: #fff;
 }
@@ -38,7 +38,7 @@
 }
 
 .tip-item p {
-    color: #000000;
+    color: #555555; /* Softer black for readability */
 }
 
 .tip-item a {
@@ -56,7 +56,7 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid #000000;
+    border: none; /* Remove border */
     position: fixed;
     left: 20px; /* Keep the sidebar on the far left */
     top: 100px;
@@ -64,7 +64,7 @@
 
 .sidebar h2 {
     margin-bottom: 10px;
-    color: #000000;
+    color: #333333;
 }
 
 .sidebar ul {
@@ -75,7 +75,7 @@
 .sidebar ul li {
     margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #000000;
+    border: 1px solid #e0e0e0; /* Lighter border */
     border-radius: 5px;
     cursor: pointer;
     color: #6200ea;
@@ -93,13 +93,13 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid #000000;
+    border: none; /* Remove border */
     text-align: center;
 }
 
 .color-theory-container h2 {
     margin-bottom: 10px;
-    color: #000000;
+    color: #333333;
 }
 
 .all-colors {
@@ -124,7 +124,7 @@
 }
 
 .color-box {
-    width: 60px;
+    width: 90px; /* Slightly wider for better fit */
     height: 60px;
     border-radius: 5px;
     cursor: pointer;
@@ -133,5 +133,10 @@
     justify-content: center;
     color: white;
     font-weight: bold;
-    border: 1px solid #000000;
+    border: 1px solid #e0e0e0; /* Lighter border */
+    transition: transform 0.2s; /* Add smooth transition for hover effect */
+}
+
+.color-box:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
 }

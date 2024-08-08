@@ -7,5 +7,4 @@ const ClosetItem = ({ item, handleItemClick }) => (
         <h4>{item.item_name}</h4>
     </div>
 );
-meowmwow
 export default ClosetItem;
